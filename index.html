@@ -8,57 +8,52 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --sky-deep:    #0A1628;
+      --sky-deep: #0A1628;
       --sky-surface: #111E35;
-      --sky-card:    #172544;
-      --sky-border:  #1E3156;
-      --accent:      #7EC8E3;
-      --sun:         #F0C040;
-      --text-main:   #E8EDF2;
-      --text-muted:  #6B8FAB;
-      --text-dim:    #3D5A72;
-
-      /* hour-of-day color stops */
-      --c-night:    #1A1060;
-      --c-dawn:     #7B3F00;
-      --c-morning:  #F0A000;
-      --c-noon:     #4AB8DC;
-      --c-afternoon:#3E7BD4;
-      --c-dusk:     #7B2D8B;
-      --c-evening:  #2D1B5E;
+      --sky-card: #172544;
+      --sky-border: #1E3156;
+      --accent: #7EC8E3;
+      --text-main: #E8EDF2;
+      --text-muted: #6B8FAB;
+      --text-dim: #3D5A72;
     }
 
     html, body {
-      height: 100%;
+      min-height: 100%;
       background: var(--sky-deep);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
     }
 
-    /* ── Layout ── */
     .app {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
       max-width: 760px;
       margin: 0 auto;
-      padding: 0 16px;
+      padding: 0 16px 40px;
     }
 
     /* ── Header ── */
     header {
       padding: 28px 0 20px;
-      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      background: var(--sky-deep);
+      z-index: 10;
+      border-bottom: 1px solid var(--sky-border);
+      margin-bottom: 24px;
     }
 
     .header-top {
       display: flex;
       align-items: baseline;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     h1 {
@@ -81,7 +76,6 @@
       top: -1px;
     }
 
-    /* ── Search bar ── */
     .search-bar {
       display: flex;
       gap: 8px;
@@ -101,8 +95,13 @@
       transition: border-color 0.15s;
     }
 
-    .search-bar input::placeholder { color: var(--text-dim); }
-    .search-bar input:focus { border-color: var(--accent); }
+    .search-bar input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .search-bar input:focus {
+      border-color: var(--accent);
+    }
 
     .btn {
       height: 40px;
@@ -116,27 +115,36 @@
       transition: opacity 0.15s, transform 0.1s;
       white-space: nowrap;
     }
-    .btn:active { transform: scale(0.97); }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
 
     .btn-primary {
       background: var(--accent);
       color: #0A1628;
     }
-    .btn-primary:hover { opacity: 0.88; }
+
+    .btn-primary:hover {
+      opacity: 0.88;
+    }
 
     .btn-ghost {
       background: var(--sky-surface);
       color: var(--text-muted);
       border: 1px solid var(--sky-border);
     }
-    .btn-ghost:hover { color: var(--text-main); border-color: var(--text-dim); }
 
-    /* ── Location pill ── */
+    .btn-ghost:hover {
+      color: var(--text-main);
+      border-color: var(--text-dim);
+    }
+
     .location-label {
-      margin-top: 12px;
+      margin-top: 10px;
       font-size: 12px;
       color: var(--text-muted);
-      min-height: 18px;
+      min-height: 16px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -145,7 +153,7 @@
       text-overflow: ellipsis;
     }
 
-    .location-label .dot-live {
+    .dot-live {
       width: 6px;
       height: 6px;
       border-radius: 50%;
@@ -155,64 +163,133 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
+      0%, 100% {
+        opacity: 1
+      }
+      50% {
+        opacity: 0.3
+      }
     }
 
-    /* ── Day dividers ── */
-    .day-divider {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      padding: 14px 0 6px 54px;
+    /* ── Day section ── */
+    .day-section {
+      margin-bottom: 20px;
+      border: 1px solid var(--sky-border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* ── Day summary header ── */
+    .day-summary {
+      background: var(--sky-card);
+      padding: 14px 18px;
       border-bottom: 1px solid var(--sky-border);
     }
 
-    /* ── Weather list ── */
-    .weather-list {
-      flex: 1;
-      overflow-y: auto;
-      border: 1px solid var(--sky-border);
-      border-radius: 10px;
-      background: var(--sky-surface);
-      margin-bottom: 16px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--sky-border) transparent;
+    .day-summary-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
     }
 
-    .weather-list::-webkit-scrollbar { width: 4px; }
-    .weather-list::-webkit-scrollbar-thumb { background: var(--sky-border); border-radius: 2px; }
+    .day-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-main);
+    }
+
+    .day-date {
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+
+    .day-stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .day-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .day-stat-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .day-stat-value {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .day-stat-value.rain {
+      color: #7EC8E3;
+    }
+
+    .day-stat-value.sun {
+      color: #F0C040;
+    }
 
     /* ── Weather row ── */
     .weather-row {
       display: flex;
       align-items: center;
-      gap: 0;
       border-bottom: 1px solid var(--sky-border);
       transition: background 0.12s;
-      position: relative;
       overflow: hidden;
     }
 
-    .weather-row:last-child { border-bottom: none; }
-    .weather-row:hover { background: var(--sky-card); }
+    .weather-row:last-child {
+      border-bottom: none;
+    }
 
-    /* ── Current hour highlight ── */
+    .weather-row:hover {
+      background: var(--sky-card);
+    }
+
     .weather-row.current-hour {
       background: var(--sky-card);
       border-top: 1px solid var(--accent);
       border-bottom: 1px solid var(--accent);
     }
-    .weather-row.current-hour .weather-row-inner { min-height: 76px; }
-    .weather-row.current-hour .time-bar          { min-height: 76px; width: 5px; }
-    .weather-row.current-hour .time-hour         { font-size: 30px; }
-    .weather-row.current-hour .col-condition     { font-size: 14px; }
-    .weather-row.current-hour .col-temp          { font-size: 32px; }
 
-    /* Signature element: time-of-day color bar */
+    .weather-row.current-hour .weather-row-inner {
+      min-height: 76px;
+    }
+
+    .weather-row.current-hour .time-bar {
+      min-height: 76px;
+      width: 5px;
+    }
+
+    .weather-row.current-hour .time-hour {
+      font-size: 30px;
+    }
+
+    .weather-row.current-hour .col-condition {
+      font-size: 14px;
+    }
+
+    .weather-row.current-hour .col-precip {
+      font-size: 18px;
+    }
+
+    .weather-row.current-hour .col-temp {
+      font-size: 32px;
+    }
+
     .time-bar {
       width: 4px;
       align-self: stretch;
@@ -259,6 +336,15 @@
       font-weight: 400;
     }
 
+    .col-precip {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      text-align: right;
+      min-width: 52px;
+      flex-shrink: 0;
+    }
+
     .col-temp {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 24px;
@@ -269,9 +355,9 @@
       flex-shrink: 0;
     }
 
-    /* ── Loading / empty ── */
+    /* ── Status / error ── */
     .status-row {
-      padding: 28px;
+      padding: 40px;
       text-align: center;
       color: var(--text-dim);
       font-size: 13px;
@@ -289,9 +375,12 @@
       vertical-align: middle;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-    /* ── Error state ── */
     .error-msg {
       padding: 24px;
       text-align: center;
@@ -299,34 +388,46 @@
       font-size: 13px;
     }
 
-    /* ── Responsive ── */
     @media (max-width: 480px) {
-      h1 { font-size: 26px; }
-      .col-time { width: 80px; }
-      .time-hour { font-size: 18px; }
-      .col-temp { font-size: 20px; min-width: 52px; }
+      h1 {
+        font-size: 26px;
+      }
+
+      .col-time {
+        width: 80px;
+      }
+
+      .time-hour {
+        font-size: 18px;
+      }
+
+      .col-temp {
+        font-size: 20px;
+        min-width: 52px;
+      }
+
+      .day-stats {
+        gap: 14px;
+      }
     }
   </style>
 </head>
 <body>
-
 <div class="app">
   <header>
     <div class="header-top">
       <h1>Hourly Weather</h1>
       <div class="header-dot"></div>
     </div>
-
     <div class="search-bar">
       <input id="address" type="text" placeholder="City or address…">
       <button id="searchBtn" class="btn btn-primary">Search</button>
       <button id="locationBtn" class="btn btn-ghost">My Location</button>
     </div>
-
     <div id="locationName" class="location-label"></div>
   </header>
 
-  <div id="weatherList" class="weather-list">
+  <div id="weatherContainer">
     <div class="status-row"><span class="spinner"></span> Detecting location…</div>
   </div>
 </div>
@@ -334,67 +435,75 @@
 <script>
   let latitude, longitude, loadedDays = 0, loading = false;
 
-  const weatherList  = document.getElementById("weatherList");
+  const container = document.getElementById("weatherContainer");
   const locationName = document.getElementById("locationName");
 
   const CONDITIONS = {
-    0:"Clear sky",1:"Mainly clear",2:"Partly cloudy",3:"Overcast",
-    45:"Fog",48:"Icy fog",
-    51:"Light drizzle",53:"Drizzle",55:"Heavy drizzle",
-    61:"Light rain",63:"Rain",65:"Heavy rain",
-    71:"Light snow",73:"Snow",75:"Heavy snow",
-    80:"Rain showers",81:"Showers",82:"Heavy showers",
-    95:"Thunderstorm"
+    0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+    45: "Fog", 48: "Icy fog",
+    51: "Light drizzle", 53: "Drizzle", 55: "Heavy drizzle",
+    61: "Light rain", 63: "Rain", 65: "Heavy rain",
+    71: "Light snow", 73: "Snow", 75: "Heavy snow",
+    80: "Rain showers", 81: "Showers", 82: "Heavy showers",
+    95: "Thunderstorm"
   };
 
   const CONDITION_COLOR = {
-    0:"#F0C040",1:"#EABB3A",2:"#7EC8E3",3:"#6B8FAB",
-    45:"#8FA8B8",48:"#8FA8B8",
-    51:"#5BAAD0",53:"#4D9EC8",55:"#3D8EB8",
-    61:"#4B8EC0",63:"#3A7AB0",65:"#2A66A0",
-    71:"#A8CCE0",73:"#90BCDA",75:"#78ACD4",
-    80:"#5BAAD0",81:"#4D9EC8",82:"#3D8EB8",
-    95:"#C060A0"
+    0: "#F0C040", 1: "#EABB3A", 2: "#7EC8E3", 3: "#6B8FAB",
+    45: "#8FA8B8", 48: "#8FA8B8",
+    51: "#5BAAD0", 53: "#4D9EC8", 55: "#3D8EB8",
+    61: "#4B8EC0", 63: "#3A7AB0", 65: "#2A66A0",
+    71: "#A8CCE0", 73: "#90BCDA", 75: "#78ACD4",
+    80: "#5BAAD0", 81: "#4D9EC8", 82: "#3D8EB8",
+    95: "#C060A0"
   };
 
-  /* Color for the left time bar based on hour (0–23) */
   function hourColor(h) {
-    if (h >= 22 || h < 5)  return "#1A1060"; // deep night
-    if (h < 7)              return "#7B3F00"; // dawn
-    if (h < 10)             return "#D08000"; // morning
-    if (h < 14)             return "#4AB8DC"; // noon
-    if (h < 18)             return "#3E7BD4"; // afternoon
-    if (h < 21)             return "#7B2D8B"; // dusk
-    return "#2D1B5E";                          // evening
+    if (h >= 22 || h < 5) return "#1A1060";
+    if (h < 7) return "#7B3F00";
+    if (h < 10) return "#D08000";
+    if (h < 14) return "#4AB8DC";
+    if (h < 18) return "#3E7BD4";
+    if (h < 21) return "#7B2D8B";
+    return "#2D1B5E";
   }
 
   function tempColor(c) {
-    if (c <= 0)   return "#7EC8E3";
-    if (c <= 10)  return "#A0D8C0";
-    if (c <= 20)  return "#E8EDF2";
-    if (c <= 28)  return "#F0C040";
+    if (c <= 0) return "#7EC8E3";
+    if (c <= 10) return "#A0D8C0";
+    if (c <= 20) return "#E8EDF2";
+    if (c <= 28) return "#F0C040";
     return "#F07040";
   }
 
-  function formatDate(d) { return d.toISOString().split("T")[0]; }
-
-  function formatHour(iso) {
-    const d = new Date(iso + ":00"); // open-meteo gives "YYYY-MM-DDTHH:MM"
-    const h = d.getHours();
-    const ampm = h >= 12 ? "PM" : "AM";
-    const h12 = h % 12 === 0 ? 12 : h % 12;
-    return { h12, ampm, hour: h, date: d };
+  function formatDate(d) {
+    return d.toISOString().split("T")[0];
   }
 
-  function isCurrentHour(date) {
+  function isCurrentHour(isoStr) {
+    const d = new Date(isoStr + ":00");
     const now = new Date();
-    return date.getFullYear() === now.getFullYear()
-        && date.getMonth()    === now.getMonth()
-        && date.getDate()     === now.getDate()
-        && date.getHours()    === now.getHours();
+    return d.getFullYear() === now.getFullYear()
+        && d.getMonth() === now.getMonth()
+        && d.getDate() === now.getDate()
+        && d.getHours() === now.getHours();
   }
 
-  let lastDay = null;
+  function fmt12(isoStr) {
+    const d = new Date(isoStr + ":00");
+    const h = d.getHours();
+    return {
+      h12: h % 12 === 0 ? 12 : h % 12,
+      ampm: h >= 12 ? "PM" : "AM",
+      hour: h
+    };
+  }
+
+  function fmtTime(isoDateTime) {
+    if (!isoDateTime) return "—";
+    const d = new Date(isoDateTime);
+    return d.toLocaleTimeString([], {hour: "numeric", minute: "2-digit"});
+  }
 
   async function loadWeatherChunk() {
     if (loading) return;
@@ -405,78 +514,168 @@
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + 2);
 
+    const sd = formatDate(startDate);
+    const ed = formatDate(endDate);
+
     const url =
         `https://api.open-meteo.com/v1/forecast` +
         `?latitude=${latitude}&longitude=${longitude}` +
-        `&hourly=temperature_2m,weather_code&timezone=auto` +
-        `&start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}`;
+        `&hourly=temperature_2m,weather_code,precipitation` +
+        `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,sunrise,sunset,uv_index_max` +
+        `&timezone=auto` +
+        `&start_date=${sd}&end_date=${ed}`;
 
     try {
-      const res  = await fetch(url);
+      const res = await fetch(url);
       const data = await res.json();
 
       if (loadedDays === 0) {
-        weatherList.innerHTML = "";
-        lastDay = null;
+        container.innerHTML = "";
       }
 
+      // Index daily data by date string
+      const daily = {};
+      const dd = data.daily;
+      for (let i = 0; i < dd.time.length; i++) {
+        daily[dd.time[i]] = {
+          code: dd.weather_code[i],
+          tempMax: Math.round(dd.temperature_2m_max[i]),
+          tempMin: Math.round(dd.temperature_2m_min[i]),
+          precipSum: dd.precipitation_sum[i],
+          sunrise: dd.sunrise[i],
+          sunset: dd.sunset[i],
+          uvMax: dd.uv_index_max[i]
+        };
+      }
+
+      // Group hourly rows by day
+      const byDay = {};
+      const dayOrder = [];
       const times = data.hourly.time;
       const temps = data.hourly.temperature_2m;
       const codes = data.hourly.weather_code;
+      const precips = data.hourly.precipitation;
 
       for (let i = 0; i < times.length; i++) {
-        const iso   = times[i];           // "2025-01-15T14:00"
-        const day   = iso.slice(0, 10);
-        const { h12, ampm, hour, date } = formatHour(iso);
-        const temp  = Math.round(temps[i]);
-        const code  = codes[i];
-        const isCurrent = isCurrentHour(date);
-
-        // Day divider
-        if (day !== lastDay) {
-          lastDay = day;
-          const d   = new Date(day + "T00:00:00");
-          const lbl = d.toLocaleDateString(undefined, { weekday:"long", month:"short", day:"numeric" });
-          const div = document.createElement("div");
-          div.className = "day-divider";
-          div.textContent = lbl;
-          weatherList.appendChild(div);
+        const day = times[i].slice(0, 10);
+        if (!byDay[day]) {
+          byDay[day] = [];
+          dayOrder.push(day);
         }
+        byDay[day].push({iso: times[i], temp: temps[i], code: codes[i], precip: precips[i]});
+      }
 
-        const row = document.createElement("div");
-        row.className = "weather-row" + (isCurrent ? " current-hour" : "");
+      let firstCurrent = null;
 
-        const bar = document.createElement("div");
-        bar.className = "time-bar";
-        bar.style.background = hourColor(hour);
+      for (const day of dayOrder) {
+        const d = new Date(day + "T00:00:00");
+        const lbl = d.toLocaleDateString(undefined, {weekday: "long"});
+        const date = d.toLocaleDateString(undefined, {month: "short", day: "numeric"});
+        const ds = daily[day] || {};
 
-        const inner = document.createElement("div");
-        inner.className = "weather-row-inner";
-        inner.innerHTML = `
-        <div class="col-time">
-          <span class="time-hour">${h12}</span><span class="time-ampm">${ampm}</span>
+        // ── Day section wrapper ──
+        const section = document.createElement("div");
+        section.className = "day-section";
+
+        // ── Day summary header ──
+        const summary = document.createElement("div");
+        summary.className = "day-summary";
+
+        const condText = CONDITIONS[ds.code] ?? "—";
+        const condCol = CONDITION_COLOR[ds.code] ?? "var(--text-muted)";
+        const precip = ds.precipSum != null
+            ? (ds.precipSum > 0 ? `${ds.precipSum.toFixed(1)} mm` : "None")
+            : "—";
+        const uv = ds.uvMax != null ? ds.uvMax.toFixed(1) : "—";
+        const rise = fmtTime(ds.sunrise);
+        const set = fmtTime(ds.sunset);
+
+        summary.innerHTML = `
+        <div class="day-summary-top">
+          <span class="day-name">${lbl}</span>
+          <span class="day-date">${date}</span>
         </div>
-        <div class="col-condition" style="color:${CONDITION_COLOR[code] || '#6B8FAB'}">
-          ${CONDITIONS[code] || "Unknown"}
+        <div class="day-stats">
+          <div class="day-stat">
+            <span class="day-stat-label">Condition</span>
+            <span class="day-stat-value" style="color:${condCol}">${condText}</span>
+          </div>
+          <div class="day-stat">
+            <span class="day-stat-label">High / Low</span>
+            <span class="day-stat-value">
+              <span style="color:${tempColor(ds.tempMax)}">${ds.tempMax ?? "—"}°</span>
+              <span style="color:var(--text-dim)"> / </span>
+              <span style="color:${tempColor(ds.tempMin)}">${ds.tempMin ?? "—"}°</span>
+            </span>
+          </div>
+          <div class="day-stat">
+            <span class="day-stat-label">Precipitation</span>
+            <span class="day-stat-value rain">${precip}</span>
+          </div>
+          <div class="day-stat">
+            <span class="day-stat-label">UV Index</span>
+            <span class="day-stat-value">${uv}</span>
+          </div>
+          <div class="day-stat">
+            <span class="day-stat-label">Sunrise</span>
+            <span class="day-stat-value sun">${rise}</span>
+          </div>
+          <div class="day-stat">
+            <span class="day-stat-label">Sunset</span>
+            <span class="day-stat-value sun">${set}</span>
+          </div>
         </div>
-        <div class="col-temp" style="color:${tempColor(temp)}">${temp}°</div>
       `;
 
-        row.appendChild(bar);
-        row.appendChild(inner);
-        weatherList.appendChild(row);
+        section.appendChild(summary);
+
+        // ── Hourly rows ──
+        for (const row of byDay[day]) {
+          const {h12, ampm, hour} = fmt12(row.iso);
+          const temp = Math.round(row.temp);
+          const isCurrent = isCurrentHour(row.iso);
+
+          const precipLabel = row.precip > 0 ? `${row.precip.toFixed(1)} mm` : "—";
+          const precipColor = row.precip >= 5 ? "#4B8EC0" : row.precip > 0 ? "#7EC8E3" : "var(--text-dim)";
+
+          const weatherRow = document.createElement("div");
+          weatherRow.className = "weather-row" + (isCurrent ? " current-hour" : "");
+          if (isCurrent && !firstCurrent) firstCurrent = weatherRow;
+
+          const bar = document.createElement("div");
+          bar.className = "time-bar";
+          bar.style.background = hourColor(hour);
+
+          const inner = document.createElement("div");
+          inner.className = "weather-row-inner";
+          inner.innerHTML = `
+          <div class="col-time">
+            <span class="time-hour">${h12}</span><span class="time-ampm">${ampm}</span>
+          </div>
+          <div class="col-condition" style="color:${CONDITION_COLOR[row.code] || '#6B8FAB'}">
+            ${CONDITIONS[row.code] || "Unknown"}
+          </div>
+          <div class="col-precip" style="color:${precipColor}">${precipLabel}</div>
+          <div class="col-temp" style="color:${tempColor(temp)}">${temp}°</div>
+        `;
+
+          weatherRow.appendChild(bar);
+          weatherRow.appendChild(inner);
+          section.appendChild(weatherRow);
+        }
+
+        container.appendChild(section);
       }
 
       loadedDays += 3;
 
-      // Scroll current hour into view after first load
-      if (loadedDays === 3) {
-        const cur = weatherList.querySelector(".current-hour");
-        if (cur) cur.scrollIntoView({ block: "center" });
+      if (loadedDays === 3 && firstCurrent) {
+        firstCurrent.scrollIntoView({block: "center"});
       }
+
     } catch (err) {
       console.error(err);
-      weatherList.innerHTML = `<div class="error-msg">Couldn't load weather data. Check your connection and try again.</div>`;
+      container.innerHTML = `<div class="error-msg">Couldn't load weather data. Check your connection and try again.</div>`;
     }
 
     loading = false;
@@ -485,16 +684,20 @@
   async function searchAddress(query) {
     locationName.innerHTML = `<span class="spinner"></span> Looking up…`;
     try {
-      const res  = await fetch(
+      const res = await fetch(
           `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}`
       );
       const data = await res.json();
-      if (!data.length) { alert("Location not found."); locationName.innerHTML=""; return; }
-      latitude  = parseFloat(data[0].lat);
+      if (!data.length) {
+        alert("Location not found.");
+        locationName.innerHTML = "";
+        return;
+      }
+      latitude = parseFloat(data[0].lat);
       longitude = parseFloat(data[0].lon);
       setLocationLabel(data[0].display_name);
       loadedDays = 0;
-      weatherList.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
+      container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
       loadWeatherChunk();
     } catch {
       locationName.innerHTML = "";
@@ -507,23 +710,29 @@
   }
 
   function useCurrentLocation() {
-    if (!navigator.geolocation) { alert("Geolocation not supported."); return; }
+    if (!navigator.geolocation) {
+      alert("Geolocation not supported.");
+      return;
+    }
     locationName.innerHTML = `<span class="spinner"></span> Detecting location…`;
     navigator.geolocation.getCurrentPosition(
         pos => {
-          latitude  = pos.coords.latitude;
+          latitude = pos.coords.latitude;
           longitude = pos.coords.longitude;
           setLocationLabel(`${latitude.toFixed(4)}°N, ${longitude.toFixed(4)}°E`);
           loadedDays = 0;
-          weatherList.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
+          container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
           loadWeatherChunk();
         },
-        () => { locationName.innerHTML=""; alert("Unable to retrieve location."); }
+        () => {
+          locationName.innerHTML = "";
+          alert("Unable to retrieve location.");
+        }
     );
   }
 
-  weatherList.addEventListener("scroll", () => {
-    const near = weatherList.scrollTop + weatherList.clientHeight >= weatherList.scrollHeight - 400;
+  window.addEventListener("scroll", () => {
+    const near = window.scrollY + window.innerHeight >= document.body.scrollHeight - 600;
     if (near) loadWeatherChunk();
   });
 
