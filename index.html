@@ -495,9 +495,42 @@
       color: #E26A6A !important;
     }
 
-    .btn-save {
-      height: 28px; padding: 0 12px;
+    .btn-save,
+    .btn-share {
+      height: 28px;
+      padding: 0 12px;
       font-size: 12px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      line-height: 1;
+      box-sizing: border-box;
+    }
+
+    /* ── Share toast ── */
+    #shareToast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--sky-card);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 8px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+      z-index: 300;
+    }
+    #shareToast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* ── Save-name modal ── */
@@ -586,6 +619,7 @@
     <div class="location-label-row" style="display:flex;align-items:center;gap:8px;margin-top:10px;min-height:20px;">
       <div id="locationName" class="location-label" style="margin-top:0;flex:1;min-width:0;"></div>
       <button id="saveBtn" class="btn btn-ghost btn-save" style="display:none;flex-shrink:0;">⭐ Save</button>
+      <button id="shareBtn" class="btn btn-ghost btn-share" style="display:none;flex-shrink:0;" title="Copy shareable link">&#8679; Share</button>
     </div>
     <div id="savedBar" class="saved-bar"></div>
   </header>
@@ -618,6 +652,9 @@
     <div class="status-row"><span class="spinner"></span> Detecting location…</div>
   </div>
 </div>
+
+<!-- Share link toast -->
+<div id="shareToast">🔗 Link copied to clipboard!</div>
 
 <script>
   let latitude, longitude, loadedDays = 0, loading = false, countryCode = "";
@@ -952,18 +989,18 @@
           const windSpd   = row.windSpd != null ? Math.round(row.windSpd) : null;
           const windLabel = windSpd != null ? `${windSpd} km/h` : "—";
           const windCol   = windSpd == null ? "var(--text-dim)"
-                          : windSpd >= 50   ? "#F07040"
-                          : windSpd >= 30   ? "#F0C040"
-                          : windSpd >= 15   ? "var(--text-main)"
+              : windSpd >= 50   ? "#F07040"
+                  : windSpd >= 30   ? "#F0C040"
+                      : windSpd >= 15   ? "var(--text-main)"
                           : "var(--text-muted)";
           const arrowSvg  = row.windDir != null ? windArrow(row.windDir) : "";
 
           const humidity  = row.humidity != null ? row.humidity : null;
           const humLabel  = humidity != null ? `${humidity}%` : "—";
           const humCol    = humidity == null     ? "var(--text-dim)"
-                          : humidity >= 80       ? "#7EC8E3"
-                          : humidity >= 60       ? "var(--text-muted)"
-                          : "var(--text-dim)";
+              : humidity >= 80       ? "#7EC8E3"
+                  : humidity >= 60       ? "var(--text-muted)"
+                      : "var(--text-dim)";
 
           const weatherRow = document.createElement("div");
           weatherRow.className = "weather-row" + (isCurrent ? " current-hour" : "");
@@ -1035,6 +1072,54 @@
 
   function setLocationLabel(name) {
     locationName.innerHTML = `<span class="dot-live"></span>${name}`;
+  }
+
+  // ── Share via URL ─────────────────────────────────────────────────────────
+  const shareToast = document.getElementById("shareToast");
+  let shareToastTimer = null;
+
+  function showShareToast(msg) {
+    shareToast.textContent = msg;
+    shareToast.classList.add("visible");
+    clearTimeout(shareToastTimer);
+    shareToastTimer = setTimeout(() => shareToast.classList.remove("visible"), 2600);
+  }
+
+  document.getElementById("shareBtn").addEventListener("click", () => {
+    if (latitude == null || longitude == null) return;
+    const label = locationName.textContent.replace(/^\s*\u2022?\s*/, "").trim();
+    const params = new URLSearchParams({
+      lat:   latitude.toFixed(6),
+      lng:   longitude.toFixed(6),
+      label: label
+    });
+    const url = `${location.origin}${location.pathname}?${params}`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(
+          () => showShareToast("🔗 Link copied to clipboard!"),
+          () => fallbackCopyShare(url)
+      );
+    } else {
+      fallbackCopyShare(url);
+    }
+  });
+
+  function fallbackCopyShare(url) {
+    // Textarea fallback for browsers that block clipboard API
+    const ta = document.createElement("textarea");
+    ta.value = url;
+    ta.style.cssText = "position:fixed;opacity:0;top:0;left:0";
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try {
+      document.execCommand("copy");
+      showShareToast("🔗 Link copied to clipboard!");
+    } catch {
+      showShareToast("⚠ Copy failed — open the console for the URL");
+      console.log("Share URL:", url);
+    }
+    document.body.removeChild(ta);
   }
 
   function useCurrentLocation() {
@@ -1152,7 +1237,26 @@
     setTimeout(closeDropdown, 150);
   });
 
-  useCurrentLocation();
+  // ── Boot: shared URL takes priority over geolocation ────────────────────
+  (function initFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const pLat   = parseFloat(params.get("lat"));
+    const pLng   = parseFloat(params.get("lng"));
+    const pLabel = params.get("label") || "";
+
+    if (!isNaN(pLat) && !isNaN(pLng)) {
+      latitude   = pLat;
+      longitude  = pLng;
+      const displayLabel = pLabel || `${pLat.toFixed(4)}°, ${pLng.toFixed(4)}°`;
+      setLocationLabel(displayLabel);
+      document.getElementById("address").value = displayLabel;
+      loadedDays = 0;
+      container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
+      resolveCountryCode().then(() => loadWeatherChunk());
+    } else {
+      useCurrentLocation();
+    }
+  })();
 
   // ── Saved Locations ─────────────────────────────────────────────────────────
   const STORAGE_KEY = "hourly_saved_locations";
@@ -1219,11 +1323,12 @@
   }
 
   // ── Show / hide Save button when a location is loaded ───────────────────────
-  // Patch setLocationLabel to also show the save button
+  // Patch setLocationLabel to also show the save + share buttons
   const _origSetLabel = setLocationLabel;
   setLocationLabel = function(name) {
     _origSetLabel(name);
     saveBtn.style.display = "inline-flex";
+    document.getElementById("shareBtn").style.display = "inline-flex";
     // Clear active pill selection when a new search happens
     // (unless it was triggered by clicking a pill)
   };
