@@ -43,10 +43,20 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#0A1628">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Our-ly Weather">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
   <title>Our-ly Weather</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -620,6 +630,11 @@
       <div id="locationName" class="location-label" style="margin-top:0;flex:1;min-width:0;"></div>
       <button id="saveBtn" class="btn btn-ghost btn-save" style="display:none;flex-shrink:0;">⭐ Save</button>
       <button id="shareBtn" class="btn btn-ghost btn-share" style="display:none;flex-shrink:0;" title="Copy shareable link">&#8679; Share</button>
+      <button id="installBtn"
+              class="btn btn-ghost btn-share"
+              style="display:none;flex-shrink:0;">
+        ⬇ Install
+      </button>
     </div>
     <div id="savedBar" class="saved-bar"></div>
   </header>
@@ -1402,6 +1417,84 @@
 
   // ── Boot: render any previously saved pills ──────────────────────────────────
   renderPills();
+</script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js")
+          .then(() => console.log("Service Worker registered"))
+          .catch(err => console.error(err));
+    });
+  }
+</script>
+<script>
+  let deferredInstallPrompt = null;
+
+  const installBtn = document.getElementById("installBtn");
+
+  // Detect iOS
+  const isIOS =
+      /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  // Running as installed app?
+  const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true;
+
+  // Android Chrome fires this event
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+
+    deferredInstallPrompt = e;
+
+    if (!isStandalone) {
+      installBtn.style.display = "inline-flex";
+    }
+  });
+
+  // Hide button once installed
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    installBtn.style.display = "none";
+  });
+
+  installBtn.addEventListener("click", async () => {
+
+    // Android
+    if (deferredInstallPrompt) {
+
+      deferredInstallPrompt.prompt();
+
+      const result = await deferredInstallPrompt.userChoice;
+
+      if (result.outcome === "accepted") {
+        console.log("Installed");
+      }
+
+      deferredInstallPrompt = null;
+      installBtn.style.display = "none";
+      return;
+    }
+
+    // iOS
+    if (isIOS && !isStandalone) {
+
+      alert(
+          `Install Our-ly Weather
+
+1. Tap the Share button
+2. Choose "Add to Home Screen"
+3. Tap Add`
+      );
+
+      return;
+    }
+
+  });
+
+  if (isIOS && !isStandalone) {
+    installBtn.style.display = "inline-flex";
+  }
 </script>
 </body>
 </html>
