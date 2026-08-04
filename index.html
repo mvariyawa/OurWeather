@@ -7,22 +7,44 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Azure Application Insights -->
+  <script type="text/javascript">
+    !function(T,l,y){var S=T.location,k="script",D=T.document,Z=D.createElement(k),NT=D.getElementsByTagName(k)[0],r="ingestionendpoint";Z.async=!0;var dn=Y[1]=Y[1]||[],yn=Y[0]||{},rn=window.appInsights=yn;if(yn[r]=yn[r]||"",!yn.config){var config=yn.config={extensionConfig:{}};config.instrumentationKey=null;try{config.connectionString=Y[0].connectionString}catch(e){}yn.snippet={version:"1.0.1"};var loadedFlag=window.appInsightsSDK||yn,i=(loadedFlag!==yn?loadedFlag:T.appInsights),n=T[i];try{for(var o=D.querySelectorAll('script[nonce]'),e=0;e<o.length;e++){var a=o[e].getAttribute("nonce");if(a){Z.setAttribute("nonce",a);break}}}catch(e){}if(n){config.name=i;n.config||(n.config=config)}}var c=T.appInsights=yn;c.shim=!0;var s=c.snippet={};if(!s[r]){s[r]=c.config[r];var f={};f[r]=s[r];c.config=f}!function(T){T.downloadAndSetup=function(e){window.appInsights=e;!function(T,l){for(var S=[];T;){l=l||0;if(T.setAuthenticatedUserContext)break;T.context||(T.context={});T=T["_"+T.config.name]}l&&window.appInsights!=T&&(window.appInsights=T,l--);if(T&&!T["_"+(T.config.name||"")]&&S.push(T),0<l)return}(T)}(c);Z.src=("https:"==S.protocol?"https://":"http://")+D.location.host+"/ai."+("undefined"!=typeof T.Reflect?"3":"2")+".min.js";NT.parentNode.insertBefore(Z,NT)}(c);c.downloadAndSetup({connectionString:"InstrumentationKey=58ab7eb1-2be2-4b11-9250-096fd5dfcf65;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=8233fedf-1dba-41c3-ba5b-801c0b2dcae6"})}(window,[],window.appInsights||[]);
+  </script>
+  <script>
+    // Wait for SDK to load then wire up custom events
+    window.addEventListener("load", function () {
+      var ai = window.appInsights;
+      if (!ai || !ai.trackEvent) return;
+
+      // Track each weather data fetch as a custom event
+      window._aiTrackWeatherFetch = function(dayOffset, durationMs, success) {
+        ai.trackEvent({ name: "WeatherFetch" }, {
+          dayOffset:   dayOffset,
+          durationMs:  durationMs,
+          success:     success
+        });
+      };
+
+      // Track location searches
+      window._aiTrackSearch = function(method) {
+        ai.trackEvent({ name: "LocationSearch" }, { method: method });
+      };
+    });
+  </script>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --sky-deep: #0A1628;
+      --sky-deep:    #0A1628;
       --sky-surface: #111E35;
-      --sky-card: #172544;
-      --sky-border: #1E3156;
-      --accent: #7EC8E3;
-      --text-main: #E8EDF2;
-      --text-muted: #6B8FAB;
-      --text-dim: #3D5A72;
+      --sky-card:    #172544;
+      --sky-border:  #1E3156;
+      --accent:      #7EC8E3;
+      --text-main:   #E8EDF2;
+      --text-muted:  #6B8FAB;
+      --text-dim:    #3D5A72;
     }
 
     html, body {
@@ -67,19 +89,14 @@
     }
 
     .header-dot {
-      width: 7px;
-      height: 7px;
+      width: 7px; height: 7px;
       border-radius: 50%;
       background: var(--accent);
       flex-shrink: 0;
-      position: relative;
-      top: -1px;
+      position: relative; top: -1px;
     }
 
-    .search-bar {
-      display: flex;
-      gap: 8px;
-    }
+    .search-bar { display: flex; gap: 8px; }
 
     .search-bar input {
       flex: 1;
@@ -94,82 +111,34 @@
       outline: none;
       transition: border-color 0.15s;
     }
-
-    .search-bar input::placeholder {
-      color: var(--text-dim);
-    }
-
-    .search-bar input:focus {
-      border-color: var(--accent);
-    }
+    .search-bar input::placeholder { color: var(--text-dim); }
+    .search-bar input:focus { border-color: var(--accent); }
 
     .btn {
-      height: 40px;
-      padding: 0 16px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      transition: opacity 0.15s, transform 0.1s;
-      white-space: nowrap;
+      height: 40px; padding: 0 16px;
+      border-radius: 6px; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      transition: opacity 0.15s, transform 0.1s; white-space: nowrap;
     }
-
-    .btn:active {
-      transform: scale(0.97);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #0A1628;
-    }
-
-    .btn-primary:hover {
-      opacity: 0.88;
-    }
-
-    .btn-ghost {
-      background: var(--sky-surface);
-      color: var(--text-muted);
-      border: 1px solid var(--sky-border);
-    }
-
-    .btn-ghost:hover {
-      color: var(--text-main);
-      border-color: var(--text-dim);
-    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--accent); color: #0A1628; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-ghost { background: var(--sky-surface); color: var(--text-muted); border: 1px solid var(--sky-border); }
+    .btn-ghost:hover { color: var(--text-main); border-color: var(--text-dim); }
 
     .location-label {
       margin-top: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
+      font-size: 12px; color: var(--text-muted);
       min-height: 16px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      display: flex; align-items: center; gap: 6px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-
     .dot-live {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      flex-shrink: 0;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
       animation: pulse 2s infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1
-      }
-      50% {
-        opacity: 0.3
-      }
-    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     /* ── Day section ── */
     .day-section {
@@ -234,13 +203,8 @@
       color: var(--text-main);
     }
 
-    .day-stat-value.rain {
-      color: #7EC8E3;
-    }
-
-    .day-stat-value.sun {
-      color: #F0C040;
-    }
+    .day-stat-value.rain  { color: #7EC8E3; }
+    .day-stat-value.sun   { color: #F0C040; }
 
     /* ── Weather row ── */
     .weather-row {
@@ -250,165 +214,79 @@
       transition: background 0.12s;
       overflow: hidden;
     }
-
-    .weather-row:last-child {
-      border-bottom: none;
-    }
-
-    .weather-row:hover {
-      background: var(--sky-card);
-    }
+    .weather-row:last-child { border-bottom: none; }
+    .weather-row:hover { background: var(--sky-card); }
 
     .weather-row.current-hour {
       background: var(--sky-card);
       border-top: 1px solid var(--accent);
       border-bottom: 1px solid var(--accent);
     }
-
-    .weather-row.current-hour .weather-row-inner {
-      min-height: 76px;
-    }
-
-    .weather-row.current-hour .time-bar {
-      min-height: 76px;
-      width: 5px;
-    }
-
-    .weather-row.current-hour .time-hour {
-      font-size: 30px;
-    }
-
-    .weather-row.current-hour .col-condition {
-      font-size: 14px;
-    }
-
-    .weather-row.current-hour .col-precip {
-      font-size: 18px;
-    }
-
-    .weather-row.current-hour .col-temp {
-      font-size: 32px;
-    }
+    .weather-row.current-hour .weather-row-inner { min-height: 76px; }
+    .weather-row.current-hour .time-bar          { min-height: 76px; width: 5px; }
+    .weather-row.current-hour .time-hour         { font-size: 30px; }
+    .weather-row.current-hour .col-condition     { font-size: 14px; }
+    .weather-row.current-hour .col-precip        { font-size: 18px; }
+    .weather-row.current-hour .col-temp          { font-size: 32px; }
 
     .time-bar {
-      width: 4px;
-      align-self: stretch;
-      flex-shrink: 0;
-      min-height: 54px;
+      width: 4px; align-self: stretch; flex-shrink: 0; min-height: 54px;
     }
 
     .weather-row-inner {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      padding: 0 16px 0 14px;
-      gap: 12px;
-      min-height: 54px;
+      display: flex; align-items: center; flex: 1;
+      padding: 0 16px 0 14px; gap: 12px; min-height: 54px;
     }
 
-    .col-time {
-      width: 110px;
-      flex-shrink: 0;
-    }
+    .col-time { width: 110px; flex-shrink: 0; }
 
     .time-hour {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 22px;
-      font-weight: 600;
-      line-height: 1;
-      color: var(--text-main);
-      letter-spacing: 0.02em;
+      font-size: 22px; font-weight: 600; line-height: 1;
+      color: var(--text-main); letter-spacing: 0.02em;
     }
-
     .time-ampm {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text-dim);
-      margin-left: 3px;
-      letter-spacing: 0.04em;
+      font-size: 13px; font-weight: 400;
+      color: var(--text-dim); margin-left: 3px; letter-spacing: 0.04em;
     }
 
-    .col-condition {
-      flex: 1;
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
+    .col-condition { flex: 1; font-size: 13px; color: var(--text-muted); font-weight: 400; }
 
     .col-precip {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 15px;
-      font-weight: 400;
-      text-align: right;
-      min-width: 52px;
-      flex-shrink: 0;
+      font-size: 15px; font-weight: 400;
+      text-align: right; min-width: 52px; flex-shrink: 0;
     }
 
     .col-temp {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 24px;
-      font-weight: 700;
-      text-align: right;
-      letter-spacing: 0.01em;
-      min-width: 64px;
-      flex-shrink: 0;
+      font-size: 24px; font-weight: 700;
+      text-align: right; letter-spacing: 0.01em;
+      min-width: 64px; flex-shrink: 0;
     }
 
     /* ── Status / error ── */
     .status-row {
-      padding: 40px;
-      text-align: center;
-      color: var(--text-dim);
-      font-size: 13px;
+      padding: 40px; text-align: center;
+      color: var(--text-dim); font-size: 13px;
     }
-
     .spinner {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--sky-border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin-right: 8px;
-      vertical-align: middle;
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid var(--sky-border); border-top-color: var(--accent);
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      margin-right: 8px; vertical-align: middle;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .error-msg {
-      padding: 24px;
-      text-align: center;
-      color: #E26A6A;
-      font-size: 13px;
-    }
+    .error-msg { padding: 24px; text-align: center; color: #E26A6A; font-size: 13px; }
 
     @media (max-width: 480px) {
-      h1 {
-        font-size: 26px;
-      }
-
-      .col-time {
-        width: 80px;
-      }
-
-      .time-hour {
-        font-size: 18px;
-      }
-
-      .col-temp {
-        font-size: 20px;
-        min-width: 52px;
-      }
-
-      .day-stats {
-        gap: 14px;
-      }
+      h1 { font-size: 26px; }
+      .col-time { width: 80px; }
+      .time-hour { font-size: 18px; }
+      .col-temp { font-size: 20px; min-width: 52px; }
+      .day-stats { gap: 14px; }
     }
   </style>
 </head>
@@ -435,65 +313,63 @@
 <script>
   let latitude, longitude, loadedDays = 0, loading = false;
 
-  const container = document.getElementById("weatherContainer");
+  const container   = document.getElementById("weatherContainer");
   const locationName = document.getElementById("locationName");
 
   const CONDITIONS = {
-    0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
-    45: "Fog", 48: "Icy fog",
-    51: "Light drizzle", 53: "Drizzle", 55: "Heavy drizzle",
-    61: "Light rain", 63: "Rain", 65: "Heavy rain",
-    71: "Light snow", 73: "Snow", 75: "Heavy snow",
-    80: "Rain showers", 81: "Showers", 82: "Heavy showers",
-    95: "Thunderstorm"
+    0:"Clear sky",1:"Mainly clear",2:"Partly cloudy",3:"Overcast",
+    45:"Fog",48:"Icy fog",
+    51:"Light drizzle",53:"Drizzle",55:"Heavy drizzle",
+    61:"Light rain",63:"Rain",65:"Heavy rain",
+    71:"Light snow",73:"Snow",75:"Heavy snow",
+    80:"Rain showers",81:"Showers",82:"Heavy showers",
+    95:"Thunderstorm"
   };
 
   const CONDITION_COLOR = {
-    0: "#F0C040", 1: "#EABB3A", 2: "#7EC8E3", 3: "#6B8FAB",
-    45: "#8FA8B8", 48: "#8FA8B8",
-    51: "#5BAAD0", 53: "#4D9EC8", 55: "#3D8EB8",
-    61: "#4B8EC0", 63: "#3A7AB0", 65: "#2A66A0",
-    71: "#A8CCE0", 73: "#90BCDA", 75: "#78ACD4",
-    80: "#5BAAD0", 81: "#4D9EC8", 82: "#3D8EB8",
-    95: "#C060A0"
+    0:"#F0C040",1:"#EABB3A",2:"#7EC8E3",3:"#6B8FAB",
+    45:"#8FA8B8",48:"#8FA8B8",
+    51:"#5BAAD0",53:"#4D9EC8",55:"#3D8EB8",
+    61:"#4B8EC0",63:"#3A7AB0",65:"#2A66A0",
+    71:"#A8CCE0",73:"#90BCDA",75:"#78ACD4",
+    80:"#5BAAD0",81:"#4D9EC8",82:"#3D8EB8",
+    95:"#C060A0"
   };
 
   function hourColor(h) {
     if (h >= 22 || h < 5) return "#1A1060";
-    if (h < 7) return "#7B3F00";
-    if (h < 10) return "#D08000";
-    if (h < 14) return "#4AB8DC";
-    if (h < 18) return "#3E7BD4";
-    if (h < 21) return "#7B2D8B";
+    if (h < 7)             return "#7B3F00";
+    if (h < 10)            return "#D08000";
+    if (h < 14)            return "#4AB8DC";
+    if (h < 18)            return "#3E7BD4";
+    if (h < 21)            return "#7B2D8B";
     return "#2D1B5E";
   }
 
   function tempColor(c) {
-    if (c <= 0) return "#7EC8E3";
+    if (c <= 0)  return "#7EC8E3";
     if (c <= 10) return "#A0D8C0";
     if (c <= 20) return "#E8EDF2";
     if (c <= 28) return "#F0C040";
     return "#F07040";
   }
 
-  function formatDate(d) {
-    return d.toISOString().split("T")[0];
-  }
+  function formatDate(d) { return d.toISOString().split("T")[0]; }
 
   function isCurrentHour(isoStr) {
     const d = new Date(isoStr + ":00");
     const now = new Date();
     return d.getFullYear() === now.getFullYear()
-        && d.getMonth() === now.getMonth()
-        && d.getDate() === now.getDate()
-        && d.getHours() === now.getHours();
+        && d.getMonth()    === now.getMonth()
+        && d.getDate()     === now.getDate()
+        && d.getHours()    === now.getHours();
   }
 
   function fmt12(isoStr) {
     const d = new Date(isoStr + ":00");
     const h = d.getHours();
     return {
-      h12: h % 12 === 0 ? 12 : h % 12,
+      h12:  h % 12 === 0 ? 12 : h % 12,
       ampm: h >= 12 ? "PM" : "AM",
       hour: h
     };
@@ -502,7 +378,7 @@
   function fmtTime(isoDateTime) {
     if (!isoDateTime) return "—";
     const d = new Date(isoDateTime);
-    return d.toLocaleTimeString([], {hour: "numeric", minute: "2-digit"});
+    return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   }
 
   async function loadWeatherChunk() {
@@ -526,8 +402,11 @@
         `&start_date=${sd}&end_date=${ed}`;
 
     try {
-      const res = await fetch(url);
+      const fetchStart = performance.now();
+      const res  = await fetch(url);
       const data = await res.json();
+      const fetchMs = Math.round(performance.now() - fetchStart);
+      if (window._aiTrackWeatherFetch) _aiTrackWeatherFetch(loadedDays, fetchMs, true);
 
       if (loadedDays === 0) {
         container.innerHTML = "";
@@ -538,40 +417,37 @@
       const dd = data.daily;
       for (let i = 0; i < dd.time.length; i++) {
         daily[dd.time[i]] = {
-          code: dd.weather_code[i],
-          tempMax: Math.round(dd.temperature_2m_max[i]),
-          tempMin: Math.round(dd.temperature_2m_min[i]),
-          precipSum: dd.precipitation_sum[i],
-          sunrise: dd.sunrise[i],
-          sunset: dd.sunset[i],
-          uvMax: dd.uv_index_max[i]
+          code:        dd.weather_code[i],
+          tempMax:     Math.round(dd.temperature_2m_max[i]),
+          tempMin:     Math.round(dd.temperature_2m_min[i]),
+          precipSum:   dd.precipitation_sum[i],
+          sunrise:     dd.sunrise[i],
+          sunset:      dd.sunset[i],
+          uvMax:       dd.uv_index_max[i]
         };
       }
 
       // Group hourly rows by day
       const byDay = {};
       const dayOrder = [];
-      const times = data.hourly.time;
-      const temps = data.hourly.temperature_2m;
-      const codes = data.hourly.weather_code;
+      const times   = data.hourly.time;
+      const temps   = data.hourly.temperature_2m;
+      const codes   = data.hourly.weather_code;
       const precips = data.hourly.precipitation;
 
       for (let i = 0; i < times.length; i++) {
         const day = times[i].slice(0, 10);
-        if (!byDay[day]) {
-          byDay[day] = [];
-          dayOrder.push(day);
-        }
-        byDay[day].push({iso: times[i], temp: temps[i], code: codes[i], precip: precips[i]});
+        if (!byDay[day]) { byDay[day] = []; dayOrder.push(day); }
+        byDay[day].push({ iso: times[i], temp: temps[i], code: codes[i], precip: precips[i] });
       }
 
       let firstCurrent = null;
 
       for (const day of dayOrder) {
-        const d = new Date(day + "T00:00:00");
-        const lbl = d.toLocaleDateString(undefined, {weekday: "long"});
-        const date = d.toLocaleDateString(undefined, {month: "short", day: "numeric"});
-        const ds = daily[day] || {};
+        const d    = new Date(day + "T00:00:00");
+        const lbl  = d.toLocaleDateString(undefined, { weekday: "long" });
+        const date = d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+        const ds   = daily[day] || {};
 
         // ── Day section wrapper ──
         const section = document.createElement("div");
@@ -582,13 +458,13 @@
         summary.className = "day-summary";
 
         const condText = CONDITIONS[ds.code] ?? "—";
-        const condCol = CONDITION_COLOR[ds.code] ?? "var(--text-muted)";
-        const precip = ds.precipSum != null
+        const condCol  = CONDITION_COLOR[ds.code] ?? "var(--text-muted)";
+        const precip   = ds.precipSum != null
             ? (ds.precipSum > 0 ? `${ds.precipSum.toFixed(1)} mm` : "None")
             : "—";
-        const uv = ds.uvMax != null ? ds.uvMax.toFixed(1) : "—";
-        const rise = fmtTime(ds.sunrise);
-        const set = fmtTime(ds.sunset);
+        const uv       = ds.uvMax != null ? ds.uvMax.toFixed(1) : "—";
+        const rise     = fmtTime(ds.sunrise);
+        const set      = fmtTime(ds.sunset);
 
         summary.innerHTML = `
         <div class="day-summary-top">
@@ -631,8 +507,8 @@
 
         // ── Hourly rows ──
         for (const row of byDay[day]) {
-          const {h12, ampm, hour} = fmt12(row.iso);
-          const temp = Math.round(row.temp);
+          const { h12, ampm, hour } = fmt12(row.iso);
+          const temp      = Math.round(row.temp);
           const isCurrent = isCurrentHour(row.iso);
 
           const precipLabel = row.precip > 0 ? `${row.precip.toFixed(1)} mm` : "—";
@@ -670,11 +546,12 @@
       loadedDays += 3;
 
       if (loadedDays === 3 && firstCurrent) {
-        firstCurrent.scrollIntoView({block: "center"});
+        firstCurrent.scrollIntoView({ block: "center" });
       }
 
     } catch (err) {
       console.error(err);
+      if (window._aiTrackWeatherFetch) _aiTrackWeatherFetch(loadedDays, 0, false);
       container.innerHTML = `<div class="error-msg">Couldn't load weather data. Check your connection and try again.</div>`;
     }
 
@@ -684,20 +561,17 @@
   async function searchAddress(query) {
     locationName.innerHTML = `<span class="spinner"></span> Looking up…`;
     try {
-      const res = await fetch(
+      const res  = await fetch(
           `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}`
       );
       const data = await res.json();
-      if (!data.length) {
-        alert("Location not found.");
-        locationName.innerHTML = "";
-        return;
-      }
-      latitude = parseFloat(data[0].lat);
+      if (!data.length) { alert("Location not found."); locationName.innerHTML = ""; return; }
+      latitude  = parseFloat(data[0].lat);
       longitude = parseFloat(data[0].lon);
       setLocationLabel(data[0].display_name);
       loadedDays = 0;
       container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
+      if (window._aiTrackSearch) _aiTrackSearch("address");
       loadWeatherChunk();
     } catch {
       locationName.innerHTML = "";
@@ -710,24 +584,19 @@
   }
 
   function useCurrentLocation() {
-    if (!navigator.geolocation) {
-      alert("Geolocation not supported.");
-      return;
-    }
+    if (!navigator.geolocation) { alert("Geolocation not supported."); return; }
     locationName.innerHTML = `<span class="spinner"></span> Detecting location…`;
     navigator.geolocation.getCurrentPosition(
         pos => {
-          latitude = pos.coords.latitude;
+          latitude  = pos.coords.latitude;
           longitude = pos.coords.longitude;
           setLocationLabel(`${latitude.toFixed(4)}°N, ${longitude.toFixed(4)}°E`);
+          if (window._aiTrackSearch) _aiTrackSearch("geolocation");
           loadedDays = 0;
           container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
           loadWeatherChunk();
         },
-        () => {
-          locationName.innerHTML = "";
-          alert("Unable to retrieve location.");
-        }
+        () => { locationName.innerHTML = ""; alert("Unable to retrieve location."); }
     );
   }
 
