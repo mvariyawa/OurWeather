@@ -200,6 +200,18 @@
     .weather-row:last-child { border-bottom: none; }
     .weather-row:hover { background: var(--sky-card); }
 
+    /* ── Current hour highlight ── */
+    .weather-row.current-hour {
+      background: var(--sky-card);
+      border-top: 1px solid var(--accent);
+      border-bottom: 1px solid var(--accent);
+    }
+    .weather-row.current-hour .weather-row-inner { min-height: 76px; }
+    .weather-row.current-hour .time-bar          { min-height: 76px; width: 5px; }
+    .weather-row.current-hour .time-hour         { font-size: 30px; }
+    .weather-row.current-hour .col-condition     { font-size: 14px; }
+    .weather-row.current-hour .col-temp          { font-size: 32px; }
+
     /* Signature element: time-of-day color bar */
     .time-bar {
       width: 4px;
@@ -371,7 +383,15 @@
     const h = d.getHours();
     const ampm = h >= 12 ? "PM" : "AM";
     const h12 = h % 12 === 0 ? 12 : h % 12;
-    return { h12, ampm, hour: h };
+    return { h12, ampm, hour: h, date: d };
+  }
+
+  function isCurrentHour(date) {
+    const now = new Date();
+    return date.getFullYear() === now.getFullYear()
+        && date.getMonth()    === now.getMonth()
+        && date.getDate()     === now.getDate()
+        && date.getHours()    === now.getHours();
   }
 
   let lastDay = null;
@@ -407,9 +427,10 @@
       for (let i = 0; i < times.length; i++) {
         const iso   = times[i];           // "2025-01-15T14:00"
         const day   = iso.slice(0, 10);
-        const { h12, ampm, hour } = formatHour(iso);
+        const { h12, ampm, hour, date } = formatHour(iso);
         const temp  = Math.round(temps[i]);
         const code  = codes[i];
+        const isCurrent = isCurrentHour(date);
 
         // Day divider
         if (day !== lastDay) {
@@ -423,7 +444,7 @@
         }
 
         const row = document.createElement("div");
-        row.className = "weather-row";
+        row.className = "weather-row" + (isCurrent ? " current-hour" : "");
 
         const bar = document.createElement("div");
         bar.className = "time-bar";
@@ -447,6 +468,12 @@
       }
 
       loadedDays += 3;
+
+      // Scroll current hour into view after first load
+      if (loadedDays === 3) {
+        const cur = weatherList.querySelector(".current-hour");
+        if (cur) cur.scrollIntoView({ block: "center" });
+      }
     } catch (err) {
       console.error(err);
       weatherList.innerHTML = `<div class="error-msg">Couldn't load weather data. Check your connection and try again.</div>`;
