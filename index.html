@@ -356,7 +356,7 @@
 </div>
 
 <script>
-  let latitude, longitude, loadedDays = 0, loading = false;
+  let latitude, longitude, loadedDays = 0, loading = false, countryCode = "";
 
   const container   = document.getElementById("weatherContainer");
   const locationName = document.getElementById("locationName");
@@ -380,6 +380,18 @@
     80:"#5BAAD0",81:"#4D9EC8",82:"#3D8EB8",
     95:"#C060A0"
   };
+
+  async function resolveCountryCode() {
+    try {
+      const res  = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+      );
+      const data = await res.json();
+      countryCode = data.address?.country_code ?? "";
+    } catch {
+      countryCode = "";
+    }
+  }
 
   function hourColor(h) {
     if (h >= 22 || h < 5) return "#1A1060";
@@ -607,13 +619,14 @@
     locationName.innerHTML = `<span class="spinner"></span> Looking up…`;
     try {
       const res  = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}`
+          `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&q=${encodeURIComponent(query)}`
       );
       const data = await res.json();
       if (!data.length) { alert("Location not found."); locationName.innerHTML = ""; return; }
       latitude  = parseFloat(data[0].lat);
       longitude = parseFloat(data[0].lon);
       setLocationLabel(data[0].display_name);
+      countryCode = data[0].address?.country_code ?? "";
       loadedDays = 0;
       container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
       if (window._aiTrackSearch) _aiTrackSearch("address");
@@ -632,11 +645,12 @@
     if (!navigator.geolocation) { alert("Geolocation not supported."); return; }
     locationName.innerHTML = `<span class="spinner"></span> Detecting location…`;
     navigator.geolocation.getCurrentPosition(
-        pos => {
+        async pos => {
           latitude  = pos.coords.latitude;
           longitude = pos.coords.longitude;
           setLocationLabel(`${latitude.toFixed(4)}°N, ${longitude.toFixed(4)}°E`);
           if (window._aiTrackSearch) _aiTrackSearch("geolocation");
+          await resolveCountryCode();
           loadedDays = 0;
           container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
           loadWeatherChunk();
@@ -685,7 +699,7 @@
     if (query.length < 3) { closeDropdown(); return; }
     try {
       const res  = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&q=${encodeURIComponent(query)}`
+          `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5${countryCode ? "&countrycodes=" + countryCode : ""}&q=${encodeURIComponent(query)}`
       );
       const data = await res.json();
       acItems = data;
