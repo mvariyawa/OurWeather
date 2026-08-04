@@ -10,7 +10,7 @@
 
   <!-- Azure Application Insights -->
   <script type="text/javascript">
-    !function(T,l,y){var S=T.location,k="script",D=T.document,Z=D.createElement(k),NT=D.getElementsByTagName(k)[0],r="ingestionendpoint";Z.async=!0;var dn=Y[1]=Y[1]||[],yn=Y[0]||{},rn=window.appInsights=yn;if(yn[r]=yn[r]||"",!yn.config){var config=yn.config={extensionConfig:{}};config.instrumentationKey=null;try{config.connectionString=Y[0].connectionString}catch(e){}yn.snippet={version:"1.0.1"};var loadedFlag=window.appInsightsSDK||yn,i=(loadedFlag!==yn?loadedFlag:T.appInsights),n=T[i];try{for(var o=D.querySelectorAll('script[nonce]'),e=0;e<o.length;e++){var a=o[e].getAttribute("nonce");if(a){Z.setAttribute("nonce",a);break}}}catch(e){}if(n){config.name=i;n.config||(n.config=config)}}var c=T.appInsights=yn;c.shim=!0;var s=c.snippet={};if(!s[r]){s[r]=c.config[r];var f={};f[r]=s[r];c.config=f}!function(T){T.downloadAndSetup=function(e){window.appInsights=e;!function(T,l){for(var S=[];T;){l=l||0;if(T.setAuthenticatedUserContext)break;T.context||(T.context={});T=T["_"+T.config.name]}l&&window.appInsights!=T&&(window.appInsights=T,l--);if(T&&!T["_"+(T.config.name||"")]&&S.push(T),0<l)return}(T)}(c);Z.src=("https:"==S.protocol?"https://":"http://")+D.location.host+"/ai."+("undefined"!=typeof T.Reflect?"3":"2")+".min.js";NT.parentNode.insertBefore(Z,NT)}(c);c.downloadAndSetup({connectionString:"InstrumentationKey=58ab7eb1-2be2-4b11-9250-096fd5dfcf65;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=8233fedf-1dba-41c3-ba5b-801c0b2dcae6"})}(window,[],window.appInsights||[]);
+    !function(T,l,y){var S=T.location,k="script",D=T.document,Z=D.createElement(k),NT=D.getElementsByTagName(k)[0],r="ingestionendpoint";Z.async=!0;var dn=Y[1]=Y[1]||[],yn=Y[0]||{},rn=window.appInsights=yn;if(yn[r]=yn[r]||"",!yn.config){var config=yn.config={extensionConfig:{}};config.instrumentationKey=null;try{config.connectionString=Y[0].connectionString}catch(e){}yn.snippet={version:"1.0.1"};var loadedFlag=window.appInsightsSDK||yn,i=(loadedFlag!==yn?loadedFlag:T.appInsights),n=T[i];try{for(var o=D.querySelectorAll('script[nonce]'),e=0;e<o.length;e++){var a=o[e].getAttribute("nonce");if(a){Z.setAttribute("nonce",a);break}}}catch(e){}if(n){config.name=i;n.config||(n.config=config)}}var c=T.appInsights=yn;c.shim=!0;var s=c.snippet={};if(!s[r]){s[r]=c.config[r];var f={};f[r]=s[r];c.config=f}!function(T){T.downloadAndSetup=function(e){window.appInsights=e;!function(T,l){for(var S=[];T;){l=l||0;if(T.setAuthenticatedUserContext)break;T.context||(T.context={});T=T["_"+T.config.name]}l&&window.appInsights!=T&&(window.appInsights=T,l--);if(T&&!T["_"+(T.config.name||"")]&&S.push(T),0<l)return}(T)}(c);Z.src=("https:"==S.protocol?"https://":"http://")+D.location.host+"/ai."+("undefined"!=typeof T.Reflect?"3":"2")+".min.js";NT.parentNode.insertBefore(Z,NT)}(c);c.downloadAndSetup({connectionString:"YOUR_CONNECTION_STRING_HERE"})}(window,[],window.appInsights||[]);
   </script>
   <script>
     // Wait for SDK to load then wire up custom events
@@ -133,6 +133,48 @@
       display: flex; align-items: center; gap: 6px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
+    /* ── Autocomplete dropdown ── */
+    .autocomplete-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .autocomplete-wrapper input {
+      width: 100%;
+    }
+
+    .autocomplete-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0; right: 0;
+      background: var(--sky-card);
+      border: 1px solid var(--sky-border);
+      border-radius: 6px;
+      overflow: hidden;
+      z-index: 100;
+      display: none;
+    }
+
+    .autocomplete-dropdown.open { display: block; }
+
+    .autocomplete-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 1px solid var(--sky-border);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .autocomplete-item:last-child { border-bottom: none; }
+    .autocomplete-item:hover, .autocomplete-item.active {
+      background: var(--sky-surface);
+      color: var(--text-main);
+    }
+
     .dot-live {
       width: 6px; height: 6px; border-radius: 50%;
       background: var(--accent); flex-shrink: 0;
@@ -298,7 +340,10 @@
       <div class="header-dot"></div>
     </div>
     <div class="search-bar">
-      <input id="address" type="text" placeholder="City or address…">
+      <div class="autocomplete-wrapper">
+        <input id="address" type="text" placeholder="City or address…" autocomplete="off">
+        <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+      </div>
       <button id="searchBtn" class="btn btn-primary">Search</button>
       <button id="locationBtn" class="btn btn-ghost">My Location</button>
     </div>
@@ -311,7 +356,7 @@
 </div>
 
 <script>
-  let latitude, longitude, loadedDays = 0, loading = false;
+  let latitude, longitude, loadedDays = 0, loading = false, countryCode = "";
 
   const container   = document.getElementById("weatherContainer");
   const locationName = document.getElementById("locationName");
@@ -335,6 +380,18 @@
     80:"#5BAAD0",81:"#4D9EC8",82:"#3D8EB8",
     95:"#C060A0"
   };
+
+  async function resolveCountryCode() {
+    try {
+      const res  = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+      );
+      const data = await res.json();
+      countryCode = data.address?.country_code ?? "";
+    } catch {
+      countryCode = "";
+    }
+  }
 
   function hourColor(h) {
     if (h >= 22 || h < 5) return "#1A1060";
@@ -562,13 +619,14 @@
     locationName.innerHTML = `<span class="spinner"></span> Looking up…`;
     try {
       const res  = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}`
+          `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&q=${encodeURIComponent(query)}`
       );
       const data = await res.json();
       if (!data.length) { alert("Location not found."); locationName.innerHTML = ""; return; }
       latitude  = parseFloat(data[0].lat);
       longitude = parseFloat(data[0].lon);
       setLocationLabel(data[0].display_name);
+      countryCode = data[0].address?.country_code ?? "";
       loadedDays = 0;
       container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
       if (window._aiTrackSearch) _aiTrackSearch("address");
@@ -587,11 +645,12 @@
     if (!navigator.geolocation) { alert("Geolocation not supported."); return; }
     locationName.innerHTML = `<span class="spinner"></span> Detecting location…`;
     navigator.geolocation.getCurrentPosition(
-        pos => {
+        async pos => {
           latitude  = pos.coords.latitude;
           longitude = pos.coords.longitude;
           setLocationLabel(`${latitude.toFixed(4)}°N, ${longitude.toFixed(4)}°E`);
           if (window._aiTrackSearch) _aiTrackSearch("geolocation");
+          await resolveCountryCode();
           loadedDays = 0;
           container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
           loadWeatherChunk();
@@ -615,6 +674,87 @@
   });
 
   document.getElementById("locationBtn").addEventListener("click", useCurrentLocation);
+
+  // ── Autocomplete ──
+  const addressInput = document.getElementById("address");
+  const dropdown     = document.getElementById("autocompleteDropdown");
+  let acDebounce     = null;
+  let acActiveIndex  = -1;
+  let acItems        = [];
+
+  function closeDropdown() {
+    dropdown.classList.remove("open");
+    dropdown.innerHTML = "";
+    acItems = [];
+    acActiveIndex = -1;
+  }
+
+  function setActiveItem(index) {
+    const items = dropdown.querySelectorAll(".autocomplete-item");
+    items.forEach((el, i) => el.classList.toggle("active", i === index));
+    acActiveIndex = index;
+  }
+
+  async function fetchSuggestions(query) {
+    if (query.length < 3) { closeDropdown(); return; }
+    try {
+      const res  = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5${countryCode ? "&countrycodes=" + countryCode : ""}&q=${encodeURIComponent(query)}`
+      );
+      const data = await res.json();
+      acItems = data;
+
+      if (!data.length) { closeDropdown(); return; }
+
+      dropdown.innerHTML = "";
+      data.forEach((place, i) => {
+        const item = document.createElement("div");
+        item.className = "autocomplete-item";
+        item.textContent = place.display_name;
+        item.addEventListener("mousedown", e => {
+          e.preventDefault();
+          addressInput.value = place.display_name;
+          closeDropdown();
+          searchAddress(place.display_name);
+        });
+        dropdown.appendChild(item);
+      });
+
+      dropdown.classList.add("open");
+      acActiveIndex = -1;
+    } catch {
+      closeDropdown();
+    }
+  }
+
+  addressInput.addEventListener("input", () => {
+    clearTimeout(acDebounce);
+    acDebounce = setTimeout(() => fetchSuggestions(addressInput.value.trim()), 300);
+  });
+
+  addressInput.addEventListener("keydown", e => {
+    const items = dropdown.querySelectorAll(".autocomplete-item");
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveItem(Math.min(acActiveIndex + 1, items.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveItem(Math.max(acActiveIndex - 1, 0));
+    } else if (e.key === "Enter") {
+      if (acActiveIndex >= 0 && acItems[acActiveIndex]) {
+        e.stopImmediatePropagation();
+        addressInput.value = acItems[acActiveIndex].display_name;
+        closeDropdown();
+        searchAddress(acItems[acActiveIndex].display_name);
+      }
+    } else if (e.key === "Escape") {
+      closeDropdown();
+    }
+  });
+
+  addressInput.addEventListener("blur", () => {
+    setTimeout(closeDropdown, 150);
+  });
 
   useCurrentLocation();
 </script>
