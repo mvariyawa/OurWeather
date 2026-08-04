@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hourly Weather</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-
   <!-- Azure Application Insights -->
   <script type="text/javascript">
     !(function (cfg){function e(){cfg.onInit&&cfg.onInit(n)}var x,w,D,t,E,n,C=window,O=document,b=C.location,q="script",I="ingestionendpoint",L="disableExceptionTracking",j="ai.device.";"instrumentationKey"[x="toLowerCase"](),w="crossOrigin",D="POST",t="appInsightsSDK",E=cfg.name||"appInsights",(cfg.name||C[t])&&(C[t]=E),n=C[E]||function(g){var f=!1,m=!1,h={initialize:!0,queue:[],sv:"8",version:2,config:g};function v(e,t){var n={},i="Browser";function a(e){e=""+e;return 1===e.length?"0"+e:e}return n[j+"id"]=i[x](),n[j+"type"]=i,n["ai.operation.name"]=b&&b.pathname||"_unknown_",n["ai.internal.sdkVersion"]="javascript:snippet_"+(h.sv||h.version),{time:(i=new Date).getUTCFullYear()+"-"+a(1+i.getUTCMonth())+"-"+a(i.getUTCDate())+"T"+a(i.getUTCHours())+":"+a(i.getUTCMinutes())+":"+a(i.getUTCSeconds())+"."+(i.getUTCMilliseconds()/1e3).toFixed(3).slice(2,5)+"Z",iKey:e,name:"Microsoft.ApplicationInsights."+e.replace(/-/g,"")+"."+t,sampleRate:100,tags:n,data:{baseData:{ver:2}},ver:undefined,seq:"1",aiDataContract:undefined}}var n,i,t,a,y=-1,T=0,S=["js.monitor.azure.com","js.cdn.applicationinsights.io","js.cdn.monitor.azure.com","js0.cdn.applicationinsights.io","js0.cdn.monitor.azure.com","js2.cdn.applicationinsights.io","js2.cdn.monitor.azure.com","az416426.vo.msecnd.net"],o=g.url||cfg.src,r=function(){return s(o,null)};function s(d,t){if((n=navigator)&&(~(n=(n.userAgent||"").toLowerCase()).indexOf("msie")||~n.indexOf("trident/"))&&~d.indexOf("ai.3")&&(d=d.replace(/(\/)(ai\.3\.)([^\d]*)$/,function(e,t,n){return t+"ai.2"+n})),!1!==cfg.cr)for(var e=0;e<S.length;e++)if(0<d.indexOf(S[e])){y=e;break}var n,i=function(e){var a,t,n,i,o,r,s,c,u,l;h.queue=[],m||(0<=y&&T+1<S.length?(a=(y+T+1)%S.length,p(d.replace(/^(.*\/\/)([\w\.]*)(\/.*)$/,function(e,t,n,i){return t+S[a]+i})),T+=1):(f=m=!0,s=d,!0!==cfg.dle&&(c=(t=function(){var e,t={},n=g.connectionString;if(n)for(var i=n.split(";"),a=0;a<i.length;a++){var o=i[a].split("=");2===o.length&&(t[o[0][x]()]=o[1])}return t[I]||(e=(n=t.endpointsuffix)?t.location:null,t[I]="https://"+(e?e+".":"")+"dc."+(n||"services.visualstudio.com")),t}()).instrumentationkey||g.instrumentationKey||"",t=(t=(t=t[I])&&"/"===t.slice(-1)?t.slice(0,-1):t)?t+"/v2/track":g.endpointUrl,t=g.userOverrideEndpointUrl||t,(n=[]).push((i="SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details)",o=s,u=t,(l=(r=v(c,"Exception")).data).baseType="ExceptionData",l.baseData.exceptions=[{typeName:"SDKLoadFailed",message:i.replace(/\./g,"-"),hasFullStack:!1,stack:i+"\nSnippet failed to load ["+o+"] -- Telemetry is disabled\nHelp Link: https://go.microsoft.com/fwlink/?linkid=2128109\nHost: "+(b&&b.pathname||"_unknown_")+"\nEndpoint: "+u,parsedStack:[]}],r)),n.push((l=s,i=t,(u=(o=v(c,"Message")).data).baseType="MessageData",(r=u.baseData).message='AI (Internal): 99 message:"'+("SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details) ("+l+")").replace(/\"/g,"")+'"',r.properties={endpoint:i},o)),s=n,c=t,JSON&&((u=C.fetch)&&!cfg.useXhr?u(c,{method:D,body:JSON.stringify(s),mode:"cors"}):XMLHttpRequest&&((l=new XMLHttpRequest).open(D,c),l.setRequestHeader("Content-type","application/json"),l.send(JSON.stringify(s)))))))},a=function(e,t){m||setTimeout(function(){!t&&h.core||i()},500),f=!1},p=function(e){var n=O.createElement(q),e=(n.src=e,t&&(n.integrity=t),n.setAttribute("data-ai-name",E),cfg[w]);return!e&&""!==e||"undefined"==n[w]||(n[w]=e),n.onload=a,n.onerror=i,n.onreadystatechange=function(e,t){"loaded"!==n.readyState&&"complete"!==n.readyState||a(0,t)},cfg.ld&&cfg.ld<0?O.getElementsByTagName("head")[0].appendChild(n):setTimeout(function(){O.getElementsByTagName(q)[0].parentNode.appendChild(n)},cfg.ld||0),n};p(d)}cfg.sri&&(n=o.match(/^((http[s]?:\/\/.*\/)\w+(\.\d+){1,5})\.(([\w]+\.){0,2}js)$/))&&6===n.length?(d="".concat(n[1],".integrity.json"),i="@".concat(n[4]),l=window.fetch,t=function(e){if(!e.ext||!e.ext[i]||!e.ext[i].file)throw Error("Error Loading JSON response");var t=e.ext[i].integrity||null;s(o=n[2]+e.ext[i].file,t)},l&&!cfg.useXhr?l(d,{method:"GET",mode:"cors"}).then(function(e){return e.json()["catch"](function(){return{}})}).then(t)["catch"](r):XMLHttpRequest&&((a=new XMLHttpRequest).open("GET",d),a.onreadystatechange=function(){if(a.readyState===XMLHttpRequest.DONE)if(200===a.status)try{t(JSON.parse(a.responseText))}catch(e){r()}else r()},a.send())):o&&r();try{h.cookie=O.cookie}catch(k){}function e(e){for(;e.length;)!function(t){h[t]=function(){var e=arguments;f||h.queue.push(function(){h[t].apply(h,e)})}}(e.pop())}var c,u,l="track",d="TrackPage",p="TrackEvent",l=(e([l+"Event",l+"PageView",l+"Exception",l+"Trace",l+"DependencyData",l+"Metric",l+"PageViewPerformance","start"+d,"stop"+d,"start"+p,"stop"+p,"addTelemetryInitializer","setAuthenticatedUserContext","clearAuthenticatedUserContext","flush"]),h.SeverityLevel={Verbose:0,Information:1,Warning:2,Error:3,Critical:4},(g.extensionConfig||{}).ApplicationInsightsAnalytics||{});return!0!==g[L]&&!0!==l[L]&&(e(["_"+(c="onerror")]),u=C[c],C[c]=function(e,t,n,i,a){var o=u&&u(e,t,n,i,a);return!0!==o&&h["_"+c]({message:e,url:t,lineNumber:n,columnNumber:i,error:a,evt:C.event}),o},g.autoExceptionInstrumented=!0),h}(cfg.cfg),(C[E]=n).queue&&0===n.queue.length?(n.queue.push(e),n.trackPageView({})):e();})({
@@ -27,7 +20,10 @@
     // Wait for SDK to load then wire up custom events
     window.addEventListener("load", function () {
       var ai = window.appInsights;
-      if (!ai || !ai.trackEvent) return;
+      if (!ai || !ai.trackEvent) {
+        console.log("No App Insights detected.")
+        return;
+      }
 
       // Track each weather data fetch as a custom event
       window._aiTrackWeatherFetch = function(dayOffset, durationMs, success) {
@@ -44,6 +40,23 @@
       };
     });
   </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#0A1628">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Our-ly Weather">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <title>Our-ly Weather</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -259,6 +272,56 @@
     .day-stat-value.rain  { color: #7EC8E3; }
     .day-stat-value.sun   { color: #F0C040; }
 
+    /* ── Day summary body: stats left, sparklines right ── */
+    .day-summary-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .day-summary-body .day-stats {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .day-sparklines {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    /* ── Sparkline row (label + chart + value) ── */
+    .day-sparkline-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .day-sparkline-label {
+      font-size: 9px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .day-sparkline-range {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 480px) {
+      .day-sparklines { display: none; }
+      .day-stat-label { min-width: 68px; }
+    }
+
     /* ── Weather row ── */
     .weather-row {
       display: flex;
@@ -279,6 +342,8 @@
     .weather-row.current-hour .time-bar          { min-height: 76px; width: 5px; }
     .weather-row.current-hour .time-hour         { font-size: 30px; }
     .weather-row.current-hour .col-condition     { font-size: 14px; }
+    .weather-row.current-hour .col-wind          { font-size: 17px; }
+    .weather-row.current-hour .col-humidity      { font-size: 17px; }
     .weather-row.current-hour .col-precip        { font-size: 18px; }
     .weather-row.current-hour .col-temp          { font-size: 32px; }
 
@@ -306,6 +371,20 @@
 
     .col-condition { flex: 1; font-size: 13px; color: var(--text-muted); font-weight: 400; }
 
+    .col-wind {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px; font-weight: 400;
+      text-align: right; min-width: 70px; flex-shrink: 0;
+      white-space: nowrap;
+      display: flex; align-items: center; justify-content: flex-end; gap: 3px;
+    }
+
+    .col-humidity {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px; font-weight: 400;
+      text-align: right; min-width: 40px; flex-shrink: 0;
+    }
+
     .col-precip {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 15px; font-weight: 400;
@@ -317,6 +396,39 @@
       font-size: 24px; font-weight: 700;
       text-align: right; letter-spacing: 0.01em;
       min-width: 64px; flex-shrink: 0;
+    }
+
+    /* ── Column header row ── */
+    .col-header-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px 0 18px; /* 4px time-bar + 14px inner-left = 18px */
+      height: 24px;
+      background: var(--sky-surface);
+      border-bottom: 1px solid var(--sky-border);
+    }
+
+    .col-hdr {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .col-hdr-time      { width: 110px; flex-shrink: 0; }
+    .col-hdr-condition { flex: 1; }
+    .col-hdr-wind      { min-width: 70px; flex-shrink: 0; text-align: right; }
+    .col-hdr-humidity  { min-width: 40px; flex-shrink: 0; text-align: right; }
+    .col-hdr-precip    { min-width: 52px; flex-shrink: 0; text-align: right; }
+    .col-hdr-temp      { min-width: 64px; flex-shrink: 0; text-align: right; }
+
+    @media (max-width: 480px) {
+      .col-hdr-time { width: 80px; }
+      .col-hdr-humidity { display: none; }
     }
 
     /* ── Status / error ── */
@@ -334,12 +446,168 @@
 
     .error-msg { padding: 24px; text-align: center; color: #E26A6A; font-size: 13px; }
 
+    /* ── Saved locations bar ── */
+    .saved-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      min-height: 0;
+    }
+
+    .saved-bar:empty { display: none; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--sky-card);
+      border: 1px solid var(--sky-border);
+      border-radius: 20px;
+      padding: 4px 10px 4px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      max-width: 220px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .pill:hover { border-color: var(--accent); color: var(--text-main); }
+    .pill.active {
+      border-color: var(--accent);
+      background: rgba(126,200,227,0.12);
+      color: var(--text-main);
+    }
+
+    .pill-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .pill-x {
+      flex-shrink: 0;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 11px;
+      line-height: 14px;
+      text-align: center;
+      transition: background 0.12s, color 0.12s;
+      margin-left: 2px;
+    }
+    .pill:hover .pill-x { color: var(--text-muted); }
+    .pill-x:hover {
+      background: rgba(226,106,106,0.25) !important;
+      color: #E26A6A !important;
+    }
+
+    .btn-save,
+    .btn-share {
+      height: 28px;
+      padding: 0 12px;
+      font-size: 12px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      line-height: 1;
+      box-sizing: border-box;
+    }
+
+    /* ── Share toast ── */
+    #shareToast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--sky-card);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 8px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+      z-index: 300;
+    }
+    #shareToast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Save-name modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.18s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: var(--sky-card);
+      border: 1px solid var(--sky-border);
+      border-radius: 10px;
+      padding: 24px 24px 20px;
+      width: 340px;
+      max-width: calc(100vw - 32px);
+      transform: translateY(8px);
+      transition: transform 0.18s;
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0); }
+
+    .modal-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      margin-bottom: 14px;
+    }
+
+    .modal-input {
+      width: 100%;
+      background: var(--sky-surface);
+      border: 1px solid var(--sky-border);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 0 12px;
+      height: 38px;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 16px;
+    }
+    .modal-input:focus { border-color: var(--accent); }
+
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+    /* ── Confirm dialog ── */
+    .confirm-msg {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
     @media (max-width: 480px) {
       h1 { font-size: 26px; }
       .col-time { width: 80px; }
       .time-hour { font-size: 18px; }
       .col-temp { font-size: 20px; min-width: 52px; }
-      .day-stats { gap: 14px; }
+      .col-wind { min-width: 58px; font-size: 12px; }
+      .col-humidity { display: none; }
+      .pill { max-width: 160px; }
     }
   </style>
 </head>
@@ -347,7 +615,7 @@
 <div class="app">
   <header>
     <div class="header-top">
-      <h1>Hourly Weather</h1>
+      <h1>Our-ly Weather</h1>
       <div class="header-dot"></div>
     </div>
     <div class="search-bar">
@@ -358,13 +626,50 @@
       <button id="searchBtn" class="btn btn-primary">Search</button>
       <button id="locationBtn" class="btn btn-ghost">My Location</button>
     </div>
-    <div id="locationName" class="location-label"></div>
+    <div class="location-label-row" style="display:flex;align-items:center;gap:8px;margin-top:10px;min-height:20px;">
+      <div id="locationName" class="location-label" style="margin-top:0;flex:1;min-width:0;"></div>
+      <button id="saveBtn" class="btn btn-ghost btn-save" style="display:none;flex-shrink:0;">⭐ Save</button>
+      <button id="shareBtn" class="btn btn-ghost btn-share" style="display:none;flex-shrink:0;" title="Copy shareable link">&#8679; Share</button>
+      <button id="installBtn"
+              class="btn btn-ghost btn-share"
+              style="display:none;flex-shrink:0;">
+        ⬇ Install
+      </button>
+    </div>
+    <div id="savedBar" class="saved-bar"></div>
   </header>
+
+  <!-- Save-name modal -->
+  <div id="saveModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-title">Save Location</div>
+      <input id="saveNameInput" class="modal-input" type="text" placeholder="Name this location…" maxlength="40">
+      <div class="modal-actions">
+        <button id="saveCancelBtn" class="btn btn-ghost">Cancel</button>
+        <button id="saveConfirmBtn" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete-confirm modal -->
+  <div id="deleteModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-title">Remove Location?</div>
+      <div id="deleteMsg" class="confirm-msg"></div>
+      <div class="modal-actions">
+        <button id="deleteCancelBtn" class="btn btn-ghost">Cancel</button>
+        <button id="deleteConfirmBtn" class="btn btn-primary" style="background:#E26A6A;color:#fff;">Remove</button>
+      </div>
+    </div>
+  </div>
 
   <div id="weatherContainer">
     <div class="status-row"><span class="spinner"></span> Detecting location…</div>
   </div>
 </div>
+
+<!-- Share link toast -->
+<div id="shareToast">🔗 Link copied to clipboard!</div>
 
 <script>
   let latitude, longitude, loadedDays = 0, loading = false, countryCode = "";
@@ -449,6 +754,81 @@
     return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   }
 
+  // ── Temperature sparkline ─────────────────────────────────────────────────
+  function buildSparkline(hourlyRows) {
+    const W = 120, H = 28, PAD = 2;
+    const temps = hourlyRows.map(r => r.temp);
+    const tMin  = Math.min(...temps);
+    const tMax  = Math.max(...temps);
+    const range = tMax - tMin || 1;
+    const n     = temps.length;
+
+    // Build bar rects
+    const barW  = (W - PAD * (n - 1)) / n;
+    let rects   = "";
+    for (let i = 0; i < n; i++) {
+      const bh  = Math.max(2, ((temps[i] - tMin) / range) * (H - 4) + 2);
+      const x   = i * (barW + PAD);
+      const y   = H - bh;
+      const col = tempColor(Math.round(temps[i]));
+      rects += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" fill="${col}" rx="1"/>`;
+    }
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:inline-block;vertical-align:middle;opacity:0.85">${rects}</svg>`;
+  }
+
+  // ── Rain curve sparkline (area/line, not bars) ───────────────────────────
+  function buildRainCurve(hourlyRows) {
+    const W = 120, H = 28;
+    const vals = hourlyRows.map(r => r.precip ?? 0);
+    const vMax = Math.max(...vals, 0.5); // floor so a dry day still renders flat
+    const n    = vals.length;
+
+    // Map each value to an SVG point (x from left, y from top)
+    const pts = vals.map((v, i) => [
+      (i / (n - 1)) * W,
+      H - 2 - ((v / vMax) * (H - 6))
+    ]);
+
+    // Catmull-Rom → cubic bezier for a smooth curve
+    function crSegment(p0, p1, p2, p3) {
+      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+      return `C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+    }
+
+    let linePath = `M ${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+    for (let i = 0; i < n - 1; i++) {
+      const p0 = pts[Math.max(i - 1, 0)];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[Math.min(i + 2, n - 1)];
+      linePath += " " + crSegment(p0, p1, p2, p3);
+    }
+
+    // Close area below the curve
+    const areaPath = `${linePath} L ${W},${H} L 0,${H} Z`;
+
+    // Intensity tint: deeper blue when wetter
+    const intensity = Math.min(vMax / 10, 1); // saturates at 10 mm/h
+    const lineOpacity  = 0.55 + intensity * 0.35;
+    const fillOpacity  = 0.12 + intensity * 0.18;
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:inline-block;vertical-align:middle;opacity:0.9">
+      <path d="${areaPath}" fill="#4B8EC0" fill-opacity="${fillOpacity.toFixed(2)}"/>
+      <path d="${linePath}" fill="none" stroke="#7EC8E3" stroke-width="1.5" stroke-opacity="${lineOpacity.toFixed(2)}" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+  }
+
+  // ── Wind direction arrow ──────────────────────────────────────────────────
+  // deg = meteorological: 0°/360° = wind FROM north (arrow points south ↓)
+  function windArrow(deg) {
+    // rotate so 0° (from N) → arrow points down (toward viewer, i.e. south)
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" style="display:inline-block;vertical-align:middle;transform:rotate(${deg}deg)" title="${deg}°"><polygon points="6,1 9,10 6,8 3,10" fill="currentColor"/></svg>`;
+  }
+
   async function loadWeatherChunk() {
     if (loading) return;
     loading = true;
@@ -464,7 +844,7 @@
     const url =
         `https://api.open-meteo.com/v1/forecast` +
         `?latitude=${latitude}&longitude=${longitude}` +
-        `&hourly=temperature_2m,weather_code,precipitation` +
+        `&hourly=temperature_2m,weather_code,precipitation,wind_speed_10m,wind_direction_10m,relative_humidity_2m` +
         `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,sunrise,sunset,uv_index_max` +
         `&timezone=auto` +
         `&start_date=${sd}&end_date=${ed}`;
@@ -498,15 +878,26 @@
       // Group hourly rows by day
       const byDay = {};
       const dayOrder = [];
-      const times   = data.hourly.time;
-      const temps   = data.hourly.temperature_2m;
-      const codes   = data.hourly.weather_code;
-      const precips = data.hourly.precipitation;
+      const times     = data.hourly.time;
+      const temps     = data.hourly.temperature_2m;
+      const codes     = data.hourly.weather_code;
+      const precips   = data.hourly.precipitation;
+      const windSpeeds = data.hourly.wind_speed_10m;
+      const windDirs   = data.hourly.wind_direction_10m;
+      const humidities = data.hourly.relative_humidity_2m;
 
       for (let i = 0; i < times.length; i++) {
         const day = times[i].slice(0, 10);
         if (!byDay[day]) { byDay[day] = []; dayOrder.push(day); }
-        byDay[day].push({ iso: times[i], temp: temps[i], code: codes[i], precip: precips[i] });
+        byDay[day].push({
+          iso:      times[i],
+          temp:     temps[i],
+          code:     codes[i],
+          precip:   precips[i],
+          windSpd:  windSpeeds[i],
+          windDir:  windDirs[i],
+          humidity: humidities[i]
+        });
       }
 
       let firstCurrent = null;
@@ -534,44 +925,72 @@
         const rise     = fmtTime(ds.sunrise);
         const set      = fmtTime(ds.sunset);
 
+        const sparkline  = buildSparkline(byDay[day]);
+        const rainCurve  = buildRainCurve(byDay[day]);
+        const totalPrecip = byDay[day].reduce((s, r) => s + (r.precip ?? 0), 0);
+        const rainSummary = totalPrecip > 0 ? `${totalPrecip.toFixed(1)} mm` : "None";
+
         summary.innerHTML = `
         <div class="day-summary-top">
           <span class="day-name">${lbl}</span>
           <span class="day-date">${date}</span>
         </div>
-        <div class="day-stats">
-          <div class="day-stat">
-            <span class="day-stat-label">Condition</span>
-            <span class="day-stat-value" style="color:${condCol}">${condText}</span>
+        <div class="day-summary-body">
+          <div class="day-stats">
+            <div class="day-stat">
+              <span class="day-stat-label">Condition</span>
+              <span class="day-stat-value" style="color:${condCol}">${condText}</span>
+            </div>
+            <div class="day-stat">
+              <span class="day-stat-label">Precipitation</span>
+              <span class="day-stat-value rain">${precip}</span>
+            </div>
+            <div class="day-stat">
+              <span class="day-stat-label">UV Index</span>
+              <span class="day-stat-value">${uv}</span>
+            </div>
+            <div class="day-stat">
+              <span class="day-stat-label">Sunrise</span>
+              <span class="day-stat-value sun">${rise}</span>
+            </div>
+            <div class="day-stat">
+              <span class="day-stat-label">Sunset</span>
+              <span class="day-stat-value sun">${set}</span>
+            </div>
           </div>
-          <div class="day-stat">
-            <span class="day-stat-label">High / Low</span>
-            <span class="day-stat-value">
-              <span style="color:${tempColor(ds.tempMax)}">${ds.tempMax ?? "—"}°</span>
-              <span style="color:var(--text-dim)"> / </span>
-              <span style="color:${tempColor(ds.tempMin)}">${ds.tempMin ?? "—"}°</span>
-            </span>
-          </div>
-          <div class="day-stat">
-            <span class="day-stat-label">Precipitation</span>
-            <span class="day-stat-value rain">${precip}</span>
-          </div>
-          <div class="day-stat">
-            <span class="day-stat-label">UV Index</span>
-            <span class="day-stat-value">${uv}</span>
-          </div>
-          <div class="day-stat">
-            <span class="day-stat-label">Sunrise</span>
-            <span class="day-stat-value sun">${rise}</span>
-          </div>
-          <div class="day-stat">
-            <span class="day-stat-label">Sunset</span>
-            <span class="day-stat-value sun">${set}</span>
+          <div class="day-sparklines">
+            <div class="day-sparkline-row">
+              <span class="day-sparkline-label">Temp</span>
+              ${sparkline}
+              <span class="day-sparkline-range">
+                <span style="color:${tempColor(ds.tempMin)}">${ds.tempMin ?? "—"}°</span>
+                <span style="color:var(--text-dim)">–</span>
+                <span style="color:${tempColor(ds.tempMax)}">${ds.tempMax ?? "—"}°</span>
+              </span>
+            </div>
+            <div class="day-sparkline-row">
+              <span class="day-sparkline-label">Rain</span>
+              ${rainCurve}
+              <span class="day-sparkline-range" style="color:#7EC8E3">${rainSummary}</span>
+            </div>
           </div>
         </div>
       `;
 
         section.appendChild(summary);
+
+        // ── Column header row ──
+        const colHeader = document.createElement("div");
+        colHeader.className = "col-header-row";
+        colHeader.innerHTML = `
+          <span class="col-hdr col-hdr-time">Time</span>
+          <span class="col-hdr col-hdr-condition">Condition</span>
+          <span class="col-hdr col-hdr-wind">Wind</span>
+          <span class="col-hdr col-hdr-humidity">Hum</span>
+          <span class="col-hdr col-hdr-precip">Precip</span>
+          <span class="col-hdr col-hdr-temp">Temp</span>
+        `;
+        section.appendChild(colHeader);
 
         // ── Hourly rows ──
         for (const row of byDay[day]) {
@@ -581,6 +1000,22 @@
 
           const precipLabel = row.precip > 0 ? `${row.precip.toFixed(1)} mm` : "—";
           const precipColor = row.precip >= 5 ? "#4B8EC0" : row.precip > 0 ? "#7EC8E3" : "var(--text-dim)";
+
+          const windSpd   = row.windSpd != null ? Math.round(row.windSpd) : null;
+          const windLabel = windSpd != null ? `${windSpd} km/h` : "—";
+          const windCol   = windSpd == null ? "var(--text-dim)"
+              : windSpd >= 50   ? "#F07040"
+                  : windSpd >= 30   ? "#F0C040"
+                      : windSpd >= 15   ? "var(--text-main)"
+                          : "var(--text-muted)";
+          const arrowSvg  = row.windDir != null ? windArrow(row.windDir) : "";
+
+          const humidity  = row.humidity != null ? row.humidity : null;
+          const humLabel  = humidity != null ? `${humidity}%` : "—";
+          const humCol    = humidity == null     ? "var(--text-dim)"
+              : humidity >= 80       ? "#7EC8E3"
+                  : humidity >= 60       ? "var(--text-muted)"
+                      : "var(--text-dim)";
 
           const weatherRow = document.createElement("div");
           weatherRow.className = "weather-row" + (isCurrent ? " current-hour" : "");
@@ -599,6 +1034,8 @@
           <div class="col-condition" style="color:${CONDITION_COLOR[row.code] || '#6B8FAB'}">
             ${CONDITIONS[row.code] || "Unknown"}
           </div>
+          <div class="col-wind" style="color:${windCol}">${arrowSvg} ${windLabel}</div>
+          <div class="col-humidity" style="color:${humCol}">${humLabel}</div>
           <div class="col-precip" style="color:${precipColor}">${precipLabel}</div>
           <div class="col-temp" style="color:${tempColor(temp)}">${temp}°</div>
         `;
@@ -650,6 +1087,54 @@
 
   function setLocationLabel(name) {
     locationName.innerHTML = `<span class="dot-live"></span>${name}`;
+  }
+
+  // ── Share via URL ─────────────────────────────────────────────────────────
+  const shareToast = document.getElementById("shareToast");
+  let shareToastTimer = null;
+
+  function showShareToast(msg) {
+    shareToast.textContent = msg;
+    shareToast.classList.add("visible");
+    clearTimeout(shareToastTimer);
+    shareToastTimer = setTimeout(() => shareToast.classList.remove("visible"), 2600);
+  }
+
+  document.getElementById("shareBtn").addEventListener("click", () => {
+    if (latitude == null || longitude == null) return;
+    const label = locationName.textContent.replace(/^\s*\u2022?\s*/, "").trim();
+    const params = new URLSearchParams({
+      lat:   latitude.toFixed(6),
+      lng:   longitude.toFixed(6),
+      label: label
+    });
+    const url = `${location.origin}${location.pathname}?${params}`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(
+          () => showShareToast("🔗 Link copied to clipboard!"),
+          () => fallbackCopyShare(url)
+      );
+    } else {
+      fallbackCopyShare(url);
+    }
+  });
+
+  function fallbackCopyShare(url) {
+    // Textarea fallback for browsers that block clipboard API
+    const ta = document.createElement("textarea");
+    ta.value = url;
+    ta.style.cssText = "position:fixed;opacity:0;top:0;left:0";
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try {
+      document.execCommand("copy");
+      showShareToast("🔗 Link copied to clipboard!");
+    } catch {
+      showShareToast("⚠ Copy failed — open the console for the URL");
+      console.log("Share URL:", url);
+    }
+    document.body.removeChild(ta);
   }
 
   function useCurrentLocation() {
@@ -767,7 +1252,249 @@
     setTimeout(closeDropdown, 150);
   });
 
-  useCurrentLocation();
+  // ── Boot: shared URL takes priority over geolocation ────────────────────
+  (function initFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const pLat   = parseFloat(params.get("lat"));
+    const pLng   = parseFloat(params.get("lng"));
+    const pLabel = params.get("label") || "";
+
+    if (!isNaN(pLat) && !isNaN(pLng)) {
+      latitude   = pLat;
+      longitude  = pLng;
+      const displayLabel = pLabel || `${pLat.toFixed(4)}°, ${pLng.toFixed(4)}°`;
+      setLocationLabel(displayLabel);
+      document.getElementById("address").value = displayLabel;
+      loadedDays = 0;
+      container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
+      resolveCountryCode().then(() => loadWeatherChunk());
+    } else {
+      useCurrentLocation();
+    }
+  })();
+
+  // ── Saved Locations ─────────────────────────────────────────────────────────
+  const STORAGE_KEY = "hourly_saved_locations";
+  const saveBtn        = document.getElementById("saveBtn");
+  const savedBar       = document.getElementById("savedBar");
+  const saveModal      = document.getElementById("saveModal");
+  const saveNameInput  = document.getElementById("saveNameInput");
+  const saveCancelBtn  = document.getElementById("saveCancelBtn");
+  const saveConfirmBtn = document.getElementById("saveConfirmBtn");
+  const deleteModal    = document.getElementById("deleteModal");
+  const deleteMsg      = document.getElementById("deleteMsg");
+  const deleteCancelBtn  = document.getElementById("deleteCancelBtn");
+  const deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
+
+  let activePillId = null;     // id of the currently selected pill
+  let pendingDeleteId = null;  // id queued for deletion
+
+  // ── Persistence helpers ──────────────────────────────────────────────────────
+  function loadSaved() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+    catch { return []; }
+  }
+  function storeSaved(list) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  }
+
+  // ── Render pills ─────────────────────────────────────────────────────────────
+  function renderPills() {
+    const saved = loadSaved();
+    savedBar.innerHTML = "";
+    saved.forEach(loc => {
+      const pill = document.createElement("div");
+      pill.className = "pill" + (loc.id === activePillId ? " active" : "");
+      pill.dataset.id = loc.id;
+      pill.innerHTML = `<span class="pill-name">${escHtml(loc.name)}</span><span class="pill-x" title="Remove">✕</span>`;
+
+      // Select pill → load location
+      pill.addEventListener("click", e => {
+        if (e.target.classList.contains("pill-x")) return;
+        activePillId = loc.id;
+        renderPills();
+        document.getElementById("address").value = loc.displayName;
+        latitude  = loc.latitude;
+        longitude = loc.longitude;
+        countryCode = loc.countryCode || "";
+        setLocationLabel(loc.displayName);
+        loadedDays = 0;
+        container.innerHTML = `<div class="status-row"><span class="spinner"></span> Loading…</div>`;
+        loadWeatherChunk();
+      });
+
+      // ✕ → confirm delete
+      pill.querySelector(".pill-x").addEventListener("click", e => {
+        e.stopPropagation();
+        openDeleteModal(loc.id, loc.name);
+      });
+
+      savedBar.appendChild(pill);
+    });
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  // ── Show / hide Save button when a location is loaded ───────────────────────
+  // Patch setLocationLabel to also show the save + share buttons
+  const _origSetLabel = setLocationLabel;
+  setLocationLabel = function(name) {
+    _origSetLabel(name);
+    saveBtn.style.display = "inline-flex";
+    document.getElementById("shareBtn").style.display = "inline-flex";
+    // Clear active pill selection when a new search happens
+    // (unless it was triggered by clicking a pill)
+  };
+
+  // ── Save modal ───────────────────────────────────────────────────────────────
+  saveBtn.addEventListener("click", () => {
+    // Prefill with current display name (strip the live dot span if present)
+    const raw = locationName.textContent.trim();
+    saveNameInput.value = raw;
+    saveModal.classList.add("open");
+    setTimeout(() => { saveNameInput.select(); }, 50);
+  });
+
+  saveCancelBtn.addEventListener("click", closeSaveModal);
+  saveModal.addEventListener("click", e => { if (e.target === saveModal) closeSaveModal(); });
+
+  saveNameInput.addEventListener("keydown", e => {
+    if (e.key === "Enter")  saveConfirmBtn.click();
+    if (e.key === "Escape") closeSaveModal();
+  });
+
+  saveConfirmBtn.addEventListener("click", () => {
+    const name = saveNameInput.value.trim();
+    if (!name) { saveNameInput.focus(); return; }
+    const saved = loadSaved();
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const displayName = locationName.textContent.replace(/^\s*\u2022?\s*/, "").trim(); // strip dot char if any
+    saved.push({ id, name, displayName, latitude, longitude, countryCode });
+    storeSaved(saved);
+    activePillId = id;
+    renderPills();
+    closeSaveModal();
+  });
+
+  function closeSaveModal() {
+    saveModal.classList.remove("open");
+    saveNameInput.value = "";
+  }
+
+  // ── Delete modal ─────────────────────────────────────────────────────────────
+  function openDeleteModal(id, name) {
+    pendingDeleteId = id;
+    deleteMsg.textContent = `Remove "${name}" from saved locations?`;
+    deleteModal.classList.add("open");
+  }
+
+  deleteCancelBtn.addEventListener("click", closeDeleteModal);
+  deleteModal.addEventListener("click", e => { if (e.target === deleteModal) closeDeleteModal(); });
+
+  deleteConfirmBtn.addEventListener("click", () => {
+    if (!pendingDeleteId) return;
+    const saved = loadSaved().filter(l => l.id !== pendingDeleteId);
+    if (activePillId === pendingDeleteId) activePillId = null;
+    storeSaved(saved);
+    renderPills();
+    closeDeleteModal();
+  });
+
+  function closeDeleteModal() {
+    deleteModal.classList.remove("open");
+    pendingDeleteId = null;
+  }
+
+  // Keyboard escape closes whichever modal is open
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      closeSaveModal();
+      closeDeleteModal();
+    }
+  });
+
+  // ── Boot: render any previously saved pills ──────────────────────────────────
+  renderPills();
+</script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js")
+          .then(() => console.log("Service Worker registered"))
+          .catch(err => console.error(err));
+    });
+  }
+</script>
+<script>
+  let deferredInstallPrompt = null;
+
+  const installBtn = document.getElementById("installBtn");
+
+  // Detect iOS
+  const isIOS =
+      /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  // Running as installed app?
+  const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true;
+
+  // Android Chrome fires this event
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+
+    deferredInstallPrompt = e;
+
+    if (!isStandalone) {
+      installBtn.style.display = "inline-flex";
+    }
+  });
+
+  // Hide button once installed
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    installBtn.style.display = "none";
+  });
+
+  installBtn.addEventListener("click", async () => {
+
+    // Android
+    if (deferredInstallPrompt) {
+
+      deferredInstallPrompt.prompt();
+
+      const result = await deferredInstallPrompt.userChoice;
+
+      if (result.outcome === "accepted") {
+        console.log("Installed");
+      }
+
+      deferredInstallPrompt = null;
+      installBtn.style.display = "none";
+      return;
+    }
+
+    // iOS
+    if (isIOS && !isStandalone) {
+
+      alert(
+          `Install Our-ly Weather
+
+1. Tap the Share button
+2. Choose "Add to Home Screen"
+3. Tap Add`
+      );
+
+      return;
+    }
+
+  });
+
+  if (isIOS && !isStandalone) {
+    installBtn.style.display = "inline-flex";
+  }
 </script>
 </body>
 </html>
