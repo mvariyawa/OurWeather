@@ -692,6 +692,40 @@
     95:"#C060A0"
   };
 
+  // SVG icon paths keyed by WMO weather code group
+  // Each value is an inline SVG string (24×24 viewBox)
+  const CONDITION_ICON = (function() {
+    const sun = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px;flex-shrink:0"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>`;
+    const partCloud = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px;flex-shrink:0"><path d="M12 2a5 5 0 0 1 5 5 5 5 0 0 1-.1 1A4 4 0 0 1 17 16H7a5 5 0 0 1-.8-9.9A5 5 0 0 1 12 2z"/><circle cx="7.5" cy="11" r="3.5" fill="none"/></svg>`;
+    const cloud = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px;flex-shrink:0"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`;
+    const fog = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px;flex-shrink:0"><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="5" y1="18" x2="19" y2="18"/><path d="M17 6a5 5 0 0 0-10 0c0 1 .2 2 .6 2.8"/></svg>`;
+    const drizzle = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px;flex-shrink:0"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><line x1="10" y1="20" x2="10" y2="23"/><line x1="14" y1="20" x2="14" y2="23"/></svg>`;
+    const rain = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px;flex-shrink:0"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><line x1="8" y1="19" x2="8" y2="23"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="16" y1="19" x2="16" y2="23"/></svg>`;
+    const snow = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px;flex-shrink:0"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="10" y1="21.5" x2="14" y2="21.5"/><line x1="8" y1="20" x2="8" y2="23"/><line x1="6" y1="21.5" x2="10" y2="21.5"/><line x1="16" y1="20" x2="16" y2="23"/><line x1="14" y1="21.5" x2="18" y2="21.5"/></svg>`;
+    const thunder = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px;flex-shrink:0"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><polyline points="12 13 9 18 13 18 10 23"/></svg>`;
+
+    return {
+      0: sun, 1: sun,
+      2: partCloud,
+      3: cloud,
+      45: fog, 48: fog,
+      51: drizzle, 53: drizzle, 55: drizzle,
+      61: rain, 63: rain, 65: rain,
+      71: snow, 73: snow, 75: snow,
+      80: rain, 81: rain, 82: rain,
+      95: thunder
+    };
+  })();
+
+  // Returns an HTML snippet with icon + label, coloured to match
+  function conditionBadge(code, extraStyle) {
+    const text  = CONDITIONS[code]    ?? "—";
+    const color = CONDITION_COLOR[code] ?? "var(--text-muted)";
+    const icon  = CONDITION_ICON[code]  ?? "";
+    const style = extraStyle ? ` style="${extraStyle}"` : "";
+    return `<span class="cond-badge" style="color:${color};display:inline-flex;align-items:center;"${style}>${icon}${text}</span>`;
+  }
+
   async function resolveCountryCode() {
     try {
       const res  = await fetch(
@@ -911,8 +945,9 @@
         const summary = document.createElement("div");
         summary.className = "day-summary";
 
-        const condText = CONDITIONS[ds.code] ?? "—";
-        const condCol  = CONDITION_COLOR[ds.code] ?? "var(--text-muted)";
+        const condText  = CONDITIONS[ds.code] ?? "—";
+        const condCol   = CONDITION_COLOR[ds.code] ?? "var(--text-muted)";
+        const condBadge = conditionBadge(ds.code);
         const precip   = ds.precipSum != null
             ? (ds.precipSum > 0 ? `${ds.precipSum.toFixed(1)} mm` : "None")
             : "—";
@@ -934,7 +969,7 @@
           <div class="day-stats">
             <div class="day-stat">
               <span class="day-stat-label">Condition</span>
-              <span class="day-stat-value" style="color:${condCol}">${condText}</span>
+              <span class="day-stat-value">${condBadge}</span>
             </div>
             <div class="day-stat">
               <span class="day-stat-label">Precipitation</span>
@@ -1026,8 +1061,8 @@
           <div class="col-time">
             <span class="time-hour">${h12}</span><span class="time-ampm">${ampm}</span>
           </div>
-          <div class="col-condition" style="color:${CONDITION_COLOR[row.code] || '#6B8FAB'}">
-            ${CONDITIONS[row.code] || "Unknown"}
+          <div class="col-condition">
+            ${conditionBadge(row.code)}
           </div>
           <div class="col-wind" style="color:${windCol}">${arrowSvg} ${windLabel}</div>
           <div class="col-humidity" style="color:${humCol}">${humLabel}</div>
