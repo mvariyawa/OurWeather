@@ -120,7 +120,17 @@
       position: relative; top: -1px;
     }
 
-    .search-bar { display: flex; gap: 8px; }
+    .search-bar { display: flex; flex-direction: column; gap: 8px; }
+
+    .search-bar .input-row { display: flex; width: 100%; }
+
+    .search-bar .action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .search-bar .action-row .action-left  { display: flex; gap: 8px; }
+    .search-bar .action-row .action-right { display: flex; gap: 8px; margin-left: auto; }
 
     .search-bar input {
       flex: 1;
@@ -500,20 +510,6 @@
       color: #E26A6A !important;
     }
 
-    .btn-save,
-    .btn-share {
-      height: 28px;
-      padding: 0 12px;
-      font-size: 12px;
-
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-
-      line-height: 1;
-      box-sizing: border-box;
-    }
-
     /* ── Share toast ── */
     #shareToast {
       position: fixed;
@@ -614,23 +610,28 @@
       <div class="header-dot"></div>
     </div>
     <div class="search-bar">
-      <div class="autocomplete-wrapper">
-        <input id="address" type="text" placeholder="City or address…" autocomplete="off" data-i18n-placeholder="searchPlaceholder">
-        <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+      <!-- Row 1: input only -->
+      <div class="input-row">
+        <div class="autocomplete-wrapper">
+          <input id="address" type="text" placeholder="City or address…" autocomplete="off" data-i18n-placeholder="searchPlaceholder">
+          <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+        </div>
       </div>
-      <button id="searchBtn" class="btn btn-primary" data-i18n="search">Search</button>
-      <button id="locationBtn" class="btn btn-ghost" data-i18n="myLocation">My Location</button>
+      <!-- Row 2: Search + My Location (left) | Save + Share + Install + Reload (right) -->
+      <div class="action-row">
+        <div class="action-left">
+          <button id="searchBtn"   class="btn btn-primary" data-i18n="search">Search</button>
+          <button id="locationBtn" class="btn btn-ghost"   data-i18n="myLocation">My Location</button>
+        </div>
+        <div class="action-right">
+          <button id="saveBtn"    class="btn btn-ghost" data-i18n="save">⭐ Save</button>
+          <button id="shareBtn"   class="btn btn-ghost" data-i18n-title="shareTitle" data-i18n="share" title="Copy shareable link">&#8679; Share</button>
+          <button id="installBtn" class="btn btn-ghost" data-i18n="install" style="display:none;flex-shrink:0;">⬇ Install</button>
+          <button id="reloadBtn"  class="btn btn-ghost" data-i18n-title="reloadTitle" title="Reload" onclick="window.location.reload()">&#8635;</button>
+        </div>
+      </div>
     </div>
-    <div class="location-label-row" style="display:flex;align-items:center;gap:8px;margin-top:10px;min-height:20px;">
-      <div id="locationName" class="location-label" style="margin-top:0;flex:1;min-width:0;"></div>
-      <button id="saveBtn" class="btn btn-ghost btn-save" style="display:none;flex-shrink:0;" data-i18n="save">⭐ Save</button>
-      <button id="shareBtn" class="btn btn-ghost btn-share" style="display:none;flex-shrink:0;" data-i18n-title="shareTitle" data-i18n="share" title="Copy shareable link">&#8679; Share</button>
-      <button id="installBtn"
-              class="btn btn-ghost btn-share"
-              style="display:none;flex-shrink:0;" data-i18n="install">
-        ⬇ Install
-      </button>
-    </div>
+    <div id="locationName" class="location-label"></div>
     <div id="savedBar" class="saved-bar"></div>
   </header>
 
@@ -685,6 +686,7 @@
         95:"Thunderstorm"
       },
       searchPlaceholder:"City or address\u2026",
+      reloadTitle:"Reload",
       search:"Search", myLocation:"My Location", save:"&#11088; Save",
       share:"&#8679; Share", install:"&#11015; Install",
       saveLocation:"Save Location", nameLocation:"Name this location\u2026",
@@ -720,6 +722,7 @@
         95:"Orage"
       },
       searchPlaceholder:"Ville ou adresse\u2026",
+      reloadTitle:"Recharger",
       search:"Rechercher", myLocation:"Ma position", save:"&#11088; Sauvegarder",
       share:"&#8679; Partager", install:"&#11015; Installer",
       saveLocation:"Enregistrer le lieu", nameLocation:"Nommer ce lieu\u2026",
@@ -755,6 +758,7 @@
         95:"Tormenta"
       },
       searchPlaceholder:"Ciudad o direcci\u00F3n\u2026",
+      reloadTitle:"Recargar",
       search:"Buscar", myLocation:"Mi ubicaci\u00F3n", save:"&#11088; Guardar",
       share:"&#8679; Compartir", install:"&#11015; Instalar",
       saveLocation:"Guardar lugar", nameLocation:"Nombrar este lugar\u2026",
@@ -790,6 +794,7 @@
         95:"Gewitter"
       },
       searchPlaceholder:"Stadt oder Adresse\u2026",
+      reloadTitle:"Neu laden",
       search:"Suchen", myLocation:"Mein Standort", save:"&#11088; Speichern",
       share:"&#8679; Teilen", install:"&#11015; Installieren",
       saveLocation:"Ort speichern", nameLocation:"Ort benennen\u2026",
@@ -825,6 +830,7 @@
         95:"Tempestade"
       },
       searchPlaceholder:"Cidade ou endere\u00E7o\u2026",
+      reloadTitle:"Recarregar",
       search:"Buscar", myLocation:"Minha localiza\u00E7\u00E3o", save:"&#11088; Salvar",
       share:"&#8679; Compartilhar", install:"&#11015; Instalar",
       saveLocation:"Salvar local", nameLocation:"Nomear este local\u2026",
@@ -860,6 +866,7 @@
         95:"Temporale"
       },
       searchPlaceholder:"Citt\u00E0 o indirizzo\u2026",
+      reloadTitle:"Ricarica",
       search:"Cerca", myLocation:"La mia posizione", save:"&#11088; Salva",
       share:"&#8679; Condividi", install:"&#11015; Installa",
       saveLocation:"Salva luogo", nameLocation:"Dai un nome a questo luogo\u2026",
@@ -895,6 +902,7 @@
         95:"\u96F7\u96E8"
       },
       searchPlaceholder:"\u90FD\u5E02\u307E\u305F\u306F\u4F4F\u6240\u2026",
+      reloadTitle:"\u518D\u8AAD\u307F\u8FBC\u307F",
       search:"\u691C\u7D22", myLocation:"\u73FE\u5728\u5730", save:"&#11088; \u4FDD\u5B58",
       share:"&#8679; \u5171\u6709", install:"&#11015; \u30A4\u30F3\u30B9\u30C8\u30FC\u30EB",
       saveLocation:"\u5834\u6240\u3092\u4FDD\u5B58", nameLocation:"\u5834\u6240\u306B\u540D\u524D\u3092\u4ED8\u3051\u308B\u2026",
@@ -930,6 +938,7 @@
         95:"\u96F7\u66B4"
       },
       searchPlaceholder:"\u57CE\u5E02\u6216\u5730\u5740\u2026",
+      reloadTitle:"\u5237\u65B0",
       search:"\u641C\u7D22", myLocation:"\u6211\u7684\u4F4D\u7F6E", save:"&#11088; \u4FDD\u5B58",
       share:"&#8679; \u5206\u4EAB", install:"&#11015; \u5B89\u88C5",
       saveLocation:"\u4FDD\u5B58\u5730\u70B9", nameLocation:"\u4E3A\u6B64\u5730\u70B9\u547D\u540D\u2026",
@@ -1692,8 +1701,6 @@
   const _origSetLabel = setLocationLabel;
   setLocationLabel = function(name) {
     _origSetLabel(name);
-    saveBtn.style.display = "inline-flex";
-    document.getElementById("shareBtn").style.display = "inline-flex";
     // Clear active pill selection when a new search happens
     // (unless it was triggered by clicking a pill)
   };
@@ -1798,7 +1805,7 @@
     deferredInstallPrompt = e;
 
     if (!isStandalone) {
-      installBtn.style.display = "inline-flex";
+      installBtn.style.display = "";
     }
   });
 
@@ -1837,7 +1844,7 @@
   });
 
   if (isIOS && !isStandalone) {
-    installBtn.style.display = "inline-flex";
+    installBtn.style.display = "";
   }
 </script>
 </body>
